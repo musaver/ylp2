@@ -1,0 +1,43 @@
+/* Hand-written additions on top of the generated Framer styles. */
+
+/* Header fades from transparent to solid on scroll */
+nav.framer-FPi9S {
+  transition: background-color 0.3s ease;
+}
+
+/* Header logo (both header variants): /public/logo.png replaces the
+   Framer SVG. The export's logo link box is 112x38; the PNG is ~2:1,
+   so it is shown with object-fit: contain and a 60px minimum height. */
+.framer-1fcegul-container .framer-drAj8.framer-1i1qkw1,
+.framer-2p9d0v-container .framer-drAj8.framer-1i1qkw1 {
+  min-height: 60px;
+  height: 60px;
+  width: auto;
+  aspect-ratio: 716 / 352;
+}
+
+/* Footer spans the full viewport width, like the navigation bar.
+   The Framer export renders it as a rounded card inside a 1340px
+   container with side padding; strip that so the dark panel bleeds
+   edge to edge. The inner content keeps its own padding. */
+footer.framer-hPbBS {
+  padding-bottom: 0 !important;
+}
+footer.framer-hPbBS .framer-1py0ysn {
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+footer.framer-hPbBS .framer-1hrkjoj {
+  border-radius: 0 !important;
+}
+
+/* Home sections linked from the header nav (`/#vision`, `/#member-journey`): smooth scroll and
+   keep the section heading clear of the fixed header. */
+html {
+  scroll-behavior: smooth;
+}
+#vision,
+#member-journey {
+  scroll-margin-top: 100px;
+}
