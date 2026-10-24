@@ -1,0 +1,102 @@
+/*
+ * Additions to Framer's "Our Commitment Section" for the Vision and Community content:
+ * an intro (heading + paragraph), bullet lists inside the cards and a 3-column grid.
+ * Colours, fonts and card styles come from the theme; only layout is defined here.
+ */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 760px;
+}
+
+.intro > * {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Three cards per row (Framer's grid is 2 x 2). */
+.grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-rows: none !important;
+  grid-auto-rows: auto !important;
+  align-items: stretch;
+}
+
+/* Phone: Framer switches the grid to a wrapping flex row; stack the cards. */
+@media (max-width: 991.98px) {
+  .grid > * {
+    flex: 1 0 100% !important;
+  }
+}
+
+/* Card width follows its grid column instead of Framer's fixed instance width. */
+.card {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* The theme's check-badge list icon (About us > Our purpose, `framer-EDCwa`), drawn as a
+   mask so it takes the theme's yellow accent on this dark section. */
+.bullet {
+  flex: none;
+  width: 18px;
+  aspect-ratio: 1;
+  background-color: var(--token-fd75245f-a555-4530-b2a1-29733fdba6cb, rgb(255, 236, 158));
+  -webkit-mask: url('data:image/svg+xml,<svg display="block" role="presentation" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M 2.637 2.509 C 3.199 1.945 3.974 1.647 4.769 1.689 C 5.526 1.726 6.48 1.359 7.014 0.824 C 8.114 -0.275 9.895 -0.275 10.995 0.824 C 11.53 1.36 12.483 1.726 13.239 1.689 C 14.035 1.647 14.81 1.945 15.373 2.509 C 15.915 3.05 16.213 3.789 16.197 4.554 C 16.18 5.357 16.618 6.444 17.186 7.01 C 17.714 7.54 18.01 8.258 18.008 9.006 C 18.007 9.754 17.709 10.471 17.179 10.998 C 16.619 11.557 16.212 12.52 16.196 13.31 C 16.182 14.037 15.887 14.73 15.373 15.244 C 14.88 15.738 14.22 16.031 13.523 16.064 C 12.684 16.107 11.588 16.594 10.995 17.187 C 9.895 18.285 8.114 18.285 7.015 17.187 C 6.422 16.594 5.326 16.107 4.488 16.064 C 3.79 16.031 3.13 15.738 2.637 15.244 C 2.123 14.731 1.828 14.038 1.814 13.312 C 1.798 12.52 1.385 11.551 0.824 10.991 C -0.275 9.892 -0.275 8.11 0.824 7.01 C 1.392 6.443 1.83 5.357 1.814 4.553 C 1.798 3.788 2.095 3.05 2.637 2.509 Z M 10.779 5.839 L 8.447 10.038 L 6.486 8.468 C 6.029 8.103 5.363 8.176 4.997 8.633 C 4.632 9.09 4.706 9.756 5.162 10.121 L 8.082 12.458 C 8.327 12.664 8.652 12.749 8.967 12.688 C 9.281 12.626 9.551 12.426 9.701 12.143 L 12.631 6.868 C 12.767 6.622 12.801 6.332 12.724 6.062 C 12.646 5.792 12.465 5.564 12.219 5.428 C 11.707 5.144 11.063 5.328 10.779 5.839 Z" fill="var(--1afajen, var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, rgb(7, 35, 47)))" height="18.01017163487697px" id="TMN1olcjS" transform="translate(-0.106 -0.01)" width="18.008273952933475px"/></svg>') alpha no-repeat center / contain;
+  mask: url('data:image/svg+xml,<svg display="block" role="presentation" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M 2.637 2.509 C 3.199 1.945 3.974 1.647 4.769 1.689 C 5.526 1.726 6.48 1.359 7.014 0.824 C 8.114 -0.275 9.895 -0.275 10.995 0.824 C 11.53 1.36 12.483 1.726 13.239 1.689 C 14.035 1.647 14.81 1.945 15.373 2.509 C 15.915 3.05 16.213 3.789 16.197 4.554 C 16.18 5.357 16.618 6.444 17.186 7.01 C 17.714 7.54 18.01 8.258 18.008 9.006 C 18.007 9.754 17.709 10.471 17.179 10.998 C 16.619 11.557 16.212 12.52 16.196 13.31 C 16.182 14.037 15.887 14.73 15.373 15.244 C 14.88 15.738 14.22 16.031 13.523 16.064 C 12.684 16.107 11.588 16.594 10.995 17.187 C 9.895 18.285 8.114 18.285 7.015 17.187 C 6.422 16.594 5.326 16.107 4.488 16.064 C 3.79 16.031 3.13 15.738 2.637 15.244 C 2.123 14.731 1.828 14.038 1.814 13.312 C 1.798 12.52 1.385 11.551 0.824 10.991 C -0.275 9.892 -0.275 8.11 0.824 7.01 C 1.392 6.443 1.83 5.357 1.814 4.553 C 1.798 3.788 2.095 3.05 2.637 2.509 Z M 10.779 5.839 L 8.447 10.038 L 6.486 8.468 C 6.029 8.103 5.363 8.176 4.997 8.633 C 4.632 9.09 4.706 9.756 5.162 10.121 L 8.082 12.458 C 8.327 12.664 8.652 12.749 8.967 12.688 C 9.281 12.626 9.551 12.426 9.701 12.143 L 12.631 6.868 C 12.767 6.622 12.801 6.332 12.724 6.062 C 12.646 5.792 12.465 5.564 12.219 5.428 C 11.707 5.144 11.063 5.328 10.779 5.839 Z" fill="var(--1afajen, var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, rgb(7, 35, 47)))" height="18.01017163487697px" id="TMN1olcjS" transform="translate(-0.106 -0.01)" width="18.008273952933475px"/></svg>') alpha no-repeat center / contain;
+}
+
+/* Framer positions bare rich-text containers absolutely; keep them in the intro's flow. */
+.intro > [data-framer-component-type] {
+  position: relative !important;
+  width: 100%;
+}
+
+/* Framer adds paragraph spacing to a <p> that is not first in its parent; not wanted here. */
+.item > p {
+  margin-top: 0 !important;
+}
+
+/* Larger body text than the theme's 16px preset (intro paragraph and list items). */
+.intro p {
+  --framer-font-size: 20px !important;
+  --framer-line-height: 1.6em !important;
+}
+
+.item > p {
+  --framer-font-size: 18px !important;
+  --framer-line-height: 1.5em !important;
+}
+
+@media (max-width: 991.98px) {
+  .intro p {
+    --framer-font-size: 18px !important;
+  }
+  .item > p {
+    --framer-font-size: 17px !important;
+  }
+}
+
+/* Use the full base-container width (1340px) like the other home sections,
+   instead of Framer's narrower 985px content column. */
+.content {
+  max-width: none !important;
+}

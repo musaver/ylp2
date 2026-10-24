@@ -1,0 +1,75 @@
+/* Hand-written additions for /feedback on top of contact-us.css and join-youthlink.css.
+   Scoped under .framer-ZYNLF like the generated rules. */
+
+/* Category selector: two option cards side by side, stacked on phones */
+.framer-ZYNLF .feedback-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+  width: 100%;
+}
+.framer-ZYNLF .feedback-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid rgba(7, 35, 47, 0.15);
+  border-radius: 10px;
+  background: var(--token-2805af98-3fc7-4c31-802c-353dd58802c4, #fafafa);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+.framer-ZYNLF .feedback-option:hover {
+  border-color: rgba(7, 35, 47, 0.35);
+}
+.framer-ZYNLF .feedback-option:has(input:checked) {
+  border-color: var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, #07232f);
+  background: var(--token-d5bfb7b6-6c2f-4f3c-9e32-8e71026f45bc, #fff);
+}
+.framer-ZYNLF .feedback-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: "Almarai", "Almarai Placeholder", sans-serif;
+  letter-spacing: -0.6px;
+  color: var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, #07232f);
+}
+.framer-ZYNLF .feedback-option-title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3em;
+}
+.framer-ZYNLF .feedback-option-description {
+  font-size: 15px;
+  line-height: 1.5em;
+  color: var(--token-5e57f2c7-1a51-4916-a826-383f429d50c1, #696f77);
+}
+
+/* Radio variant of the join-youthlink checkbox */
+.framer-ZYNLF .feedback-radio {
+  border-radius: 50%;
+}
+.framer-ZYNLF .feedback-radio:checked {
+  background-image: none;
+  box-shadow: inset 0 0 0 4px var(--token-d5bfb7b6-6c2f-4f3c-9e32-8e71026f45bc, #fff);
+}
+
+/* Topic select before a category is chosen */
+.framer-ZYNLF .join-select select.framer-form-input:disabled {
+  cursor: not-allowed;
+}
+
+/* Confirmation under the submit button */
+.framer-ZYNLF .framer-text.feedback-confirmation {
+  --framer-text-color: var(--token-aa6876da-2b95-46e3-a8ec-65799d87cb71, #2d5f2f);
+  width: 100%;
+  outline: none;
+}
+
+@media (max-width: 991.98px) {
+  .framer-ZYNLF .feedback-options {
+    grid-template-columns: 1fr;
+  }
+}

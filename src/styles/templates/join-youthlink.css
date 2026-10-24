@@ -1,0 +1,193 @@
+/* Hand-written additions for /join-youthlink on top of the generated contact-us.css.
+   Scoped under .framer-ZYNLF like the generated rules. */
+
+/* The form section's base container stacks the form and the privacy note (the export lays out
+   its single child in a row). */
+.framer-ZYNLF .join-form-section .framer-zrwdok {
+  flex-direction: column;
+  gap: 30px;
+}
+.framer-ZYNLF .join-form-section .framer-1ddmkcf {
+  flex: none;
+  width: 100%;
+}
+
+/* Long question labels wrap instead of overflowing the card (the export uses white-space: pre). */
+.framer-ZYNLF .join-label {
+  white-space: normal;
+  width: 100%;
+}
+
+/* Required marker in field labels */
+.framer-ZYNLF .join-required {
+  color: #d93025;
+  margin-left: 2px;
+}
+
+/* Helper text under a control */
+.framer-ZYNLF .framer-text.join-hint {
+  --framer-font-size: 14px;
+  --framer-text-color: var(--token-5e57f2c7-1a51-4916-a826-383f429d50c1, #696f77);
+  margin-top: 2px;
+}
+
+/* Native select inside the Framer input box */
+.framer-ZYNLF .join-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%2307232f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+}
+.framer-ZYNLF .join-select select.framer-form-input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 26px;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+.framer-ZYNLF .join-select select.framer-form-input:has(option[value=""]:checked) {
+  color: var(--framer-input-placeholder-color);
+}
+.framer-ZYNLF .join-select select.framer-form-input option {
+  color: var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, #07232f);
+}
+
+/* Checkbox groups */
+.framer-ZYNLF .join-choices {
+  flex-flow: column;
+  flex: 1 0 0;
+  place-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+  width: 1px;
+  min-width: 100%;
+  height: min-content;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  position: relative;
+}
+.framer-ZYNLF .join-choices legend {
+  padding: 0;
+  margin-bottom: 5px;
+}
+.framer-ZYNLF .join-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  cursor: pointer;
+  font-family: "Almarai", "Almarai Placeholder", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.6px;
+  line-height: 1.5em;
+  color: var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, #07232f);
+}
+.framer-ZYNLF .join-choice + .join-choice {
+  margin-top: 5px;
+}
+.framer-ZYNLF .join-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  border: 1px solid rgba(7, 35, 47, 0.25);
+  border-radius: 5px;
+  background: var(--token-d5bfb7b6-6c2f-4f3c-9e32-8e71026f45bc, #fff);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+.framer-ZYNLF .join-checkbox:checked {
+  background-color: var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, #07232f);
+  border-color: var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, #07232f);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.2l2.6 2.6L10 3.5' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
+}
+.framer-ZYNLF .join-checkbox:focus-visible {
+  outline: 2px solid var(--token-aa6876da-2b95-46e3-a8ec-65799d87cb71, #2d5f2f);
+  outline-offset: 2px;
+}
+
+/* Consent row: a single checkbox with a long label */
+.framer-ZYNLF .join-consent {
+  flex: none;
+  width: 100%;
+  min-width: 100%;
+}
+
+/* Privacy note under the form, inside the dark form section */
+.framer-ZYNLF .join-privacy {
+  display: flex;
+  flex: none;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+.framer-ZYNLF .join-privacy-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  max-width: 700px;
+  padding: 32px 36px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--token-c42e4405-7003-4877-add3-139459a6462f, rgba(219, 226, 234, 0.2));
+  border-left: 4px solid var(--token-fd75245f-a555-4530-b2a1-29733fdba6cb, #ffec9e);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
+.framer-ZYNLF .join-privacy-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--token-fd75245f-a555-4530-b2a1-29733fdba6cb, #ffec9e);
+  color: var(--token-c7e8e6d2-1a37-471a-9498-bf74cbe24d87, #07232f);
+}
+.framer-ZYNLF .join-privacy-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  /* Centres the heading on the 52px icon. */
+  padding-top: 10px;
+}
+.framer-ZYNLF .join-privacy-link {
+  color: var(--token-fd75245f-a555-4530-b2a1-29733fdba6cb, #ffec9e);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (min-width: 992px) and (max-width: 1279.98px) {
+  .framer-ZYNLF .join-privacy-card {
+    max-width: 590px;
+  }
+}
+@media (max-width: 991.98px) {
+  .framer-ZYNLF .join-form-section {
+    padding-bottom: 60px;
+  }
+  .framer-ZYNLF .join-privacy-card {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 20px;
+  }
+  .framer-ZYNLF .join-privacy-icon {
+    width: 44px;
+    height: 44px;
+  }
+  .framer-ZYNLF .join-privacy-content {
+    padding-top: 0;
+  }
+}
