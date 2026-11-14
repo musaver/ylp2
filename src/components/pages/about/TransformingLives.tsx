@@ -21,7 +21,7 @@ export interface TransformingLivesProps {
 }
 
 const LOGO_IMAGE: FramerImage = {
-  src: "/images/Od2skloa7zqvI6TKjYILXTmySs.svg",
+  src: "/images/logo-mark-yellow.svg",
   alt: "Logo Image",
   width: 200,
   height: 200,
