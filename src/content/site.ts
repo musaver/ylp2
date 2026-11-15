@@ -5,8 +5,13 @@ export const site = {
   title: "YouthLink — Building an active community, not a crowd",
   description:
     "YouthLink brings young Muslims together to grow through learning, projects and responsibility, building knowledge, voice and community.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  ogImage: "https://framerusercontent.com/assets/iDVDTfA9thFamyycHknPcHtoEks.png",
+  // On Vercel, fall back to the production domain so share-preview image URLs aren't localhost.
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "http://localhost:3000"),
+  ogImage: "/og-image.png",
   tagline: "Together, we have the power to change lives.",
   copyright: "© YouthLink. All Rights Reserved.",
   contact: {
