@@ -67,49 +67,24 @@ export const HOME_BANNER: HomeBannerContent = {
   body: "A strong Muslim community that develops character, skills, networks and practical capacity to serve society.",
   primary: { label: "Join Youthlink", href: "/join-youthlink" },
   secondary: { label: "Our Projects", href: "/projects" },
+  // Silhouettes cut from YouthLink's own youth-and-crescent picture: decorative, so no alt text.
   avatars: [
-    {
-      src: "/images/IQKddGGUVKfESbTRhHhxUrBqwQ.jpg",
-      srcSet:
-        "/images/IQKddGGUVKfESbTRhHhxUrBqwQ-1.jpg 512w, /images/IQKddGGUVKfESbTRhHhxUrBqwQ-2.jpg 1024w, /images/IQKddGGUVKfESbTRhHhxUrBqwQ-3.jpg 2048w, /images/IQKddGGUVKfESbTRhHhxUrBqwQ-4.jpg 4096w, /images/IQKddGGUVKfESbTRhHhxUrBqwQ.jpg 4928w",
-      alt: "Avatar Image",
-      width: 4928,
-      height: 3264,
-    },
-    {
-      src: "/images/12WmprRLTu4fVOJbRtXrv06awc.jpg",
-      srcSet:
-        "/images/12WmprRLTu4fVOJbRtXrv06awc-1.jpg 682w, /images/12WmprRLTu4fVOJbRtXrv06awc-2.jpg 1365w, /images/12WmprRLTu4fVOJbRtXrv06awc-3.jpg 2730w, /images/12WmprRLTu4fVOJbRtXrv06awc.jpg 3840w",
-      alt: "Avatar Image",
-      width: 3840,
-      height: 5760,
-    },
-    {
-      src: "/images/Ob2yXfDcbD9RE20FS3pJX3sdaO8.jpg",
-      srcSet:
-        "/images/Ob2yXfDcbD9RE20FS3pJX3sdaO8-1.jpg 921w, /images/Ob2yXfDcbD9RE20FS3pJX3sdaO8-2.jpg 1843w, /images/Ob2yXfDcbD9RE20FS3pJX3sdaO8.jpg 3456w",
-      alt: "Avatar Image",
-      width: 3456,
-      height: 3840,
-    },
-    {
-      src: "/images/hMKseFGukPKk9f7zR5kGXXyfnLw.jpg",
-      srcSet:
-        "/images/hMKseFGukPKk9f7zR5kGXXyfnLw-1.jpg 865w, /images/hMKseFGukPKk9f7zR5kGXXyfnLw-2.jpg 1730w, /images/hMKseFGukPKk9f7zR5kGXXyfnLw.jpg 3456w",
-      alt: "Avatar Image",
-      width: 3456,
-      height: 4089,
-    },
+    { src: "/images/youthlink/avatar-1-100.jpg", alt: "", width: 100, height: 100 },
+    { src: "/images/youthlink/avatar-2-100.jpg", alt: "", width: 100, height: 100 },
+    { src: "/images/youthlink/avatar-3-100.jpg", alt: "", width: 100, height: 100 },
+    { src: "/images/youthlink/avatar-4-100.jpg", alt: "", width: 100, height: 100 },
   ],
   statValue: "5,000+ active members",
   statLabel: "come together to serve society",
   image: {
-    src: "/images/DfzAH6RGbktPmaR9vLv5h70okFQ.jpg",
+    src: "/images/youthlink/hero-reading-712.jpg",
     srcSet:
-      "/images/DfzAH6RGbktPmaR9vLv5h70okFQ-1.jpg 512w, /images/DfzAH6RGbktPmaR9vLv5h70okFQ-2.jpg 1024w, /images/DfzAH6RGbktPmaR9vLv5h70okFQ-3.jpg 2048w, /images/DfzAH6RGbktPmaR9vLv5h70okFQ-4.jpg 4096w, /images/DfzAH6RGbktPmaR9vLv5h70okFQ.jpg 8192w",
-    alt: "Home Banner Image",
-    width: 8192,
-    height: 5462,
+      "/images/youthlink/hero-reading-512.jpg 512w, /images/youthlink/hero-reading-712.jpg 712w",
+    alt: "Young man reading at a shelf of Islamic books",
+    width: 712,
+    height: 788,
+    // The phone layout crops top and bottom; anchoring to the top keeps his head in frame.
+    objectPosition: "center top",
   },
 };
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { SlashLabel } from "@/components/sections/framer-shared";
 import { site } from "@/content/site";
-import type { NavLink } from "@/lib/types";
+import type { FramerImage, NavLink } from "@/lib/types";
 
 // The three call-to-action blocks Framer places above the footer:
 //   image       = div.framer-6ztox7-container  (hash 14fb8d6f3f): photo + dark overlay
@@ -20,6 +20,8 @@ export interface CtaContent {
   primary?: NavLink;
   /** `null` hides the secondary button. */
   secondary?: NavLink | null;
+  /** Background photo; omitted, the block keeps the template's photo. */
+  image?: FramerImage;
 }
 
 type Breakpoint = "desktop" | "tablet" | "phone";
@@ -56,6 +58,16 @@ const BACKGROUND_IMAGE_WRAPPER: CSSProperties = {
   right: "0",
   bottom: "0",
   left: "0",
+};
+
+/** Background photo of the "image" CTA as exported; `CtaContent.image` replaces it. */
+const DEFAULT_CTA_IMAGE: FramerImage = {
+  src: "/images/XuxsIBAT7TablKKH8Ch5Wva9uLY.jpg",
+  srcSet:
+    "/images/XuxsIBAT7TablKKH8Ch5Wva9uLY-1.jpg 512w, /images/XuxsIBAT7TablKKH8Ch5Wva9uLY-2.jpg 1024w, /images/XuxsIBAT7TablKKH8Ch5Wva9uLY-3.jpg 2048w, /images/XuxsIBAT7TablKKH8Ch5Wva9uLY-4.jpg 4096w, /images/XuxsIBAT7TablKKH8Ch5Wva9uLY.jpg 5281w",
+  alt: "CTA Image",
+  width: 5281,
+  height: 3521,
 };
 
 const CTA_COMPONENTS: Record<
@@ -296,6 +308,7 @@ function CtaImage({ bp, content = {} }: { bp: Breakpoint; content?: CtaContent }
     text = site.cta.text,
     primary = site.cta.primary,
     secondary = site.cta.secondary,
+    image = DEFAULT_CTA_IMAGE,
   } = content;
   const centred = phone ? { "--framer-text-alignment": "center" } : undefined;
   return (
@@ -332,12 +345,12 @@ function CtaImage({ bp, content = {} }: { bp: Breakpoint; content?: CtaContent }
               <div style={BACKGROUND_IMAGE_WRAPPER} data-framer-background-image-wrapper="true">
                 <img
                   decoding="async"
-                  width="5281"
-                  height="3521"
+                  width={image.width}
+                  height={image.height}
                   sizes="(min-width: 1280px) max(min(max(100vw, 1px), 1340px) - 40px, 1px), (max-width: 991.98px) max(min(max(100vw, 1px), 1340px) - 40px, 1px), (min-width: 992px) and (max-width: 1279.98px) max(min(max(100vw, 1px), 1340px) - 40px, 1px)"
-                  srcSet="/images/XuxsIBAT7TablKKH8Ch5Wva9uLY-1.jpg 512w, /images/XuxsIBAT7TablKKH8Ch5Wva9uLY-2.jpg 1024w, /images/XuxsIBAT7TablKKH8Ch5Wva9uLY-3.jpg 2048w, /images/XuxsIBAT7TablKKH8Ch5Wva9uLY-4.jpg 4096w, /images/XuxsIBAT7TablKKH8Ch5Wva9uLY.jpg 5281w"
-                  src="/images/XuxsIBAT7TablKKH8Ch5Wva9uLY.jpg"
-                  alt="CTA Image"
+                  srcSet={image.srcSet}
+                  src={image.src}
+                  alt={image.alt}
                   style={{
                     display: "block",
                     width: "100%",

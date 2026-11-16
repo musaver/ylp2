@@ -1,4 +1,4 @@
-import type { NavLink, SocialLink } from "@/lib/types";
+import type { FramerImage, NavLink, SocialLink } from "@/lib/types";
 
 export const site = {
   name: "YouthLink",
@@ -36,6 +36,14 @@ export const site = {
     text: "Have an initiative that can serve the Ummah and society? Bring your idea into the YouthLink network and explore how it can be developed with the right people, skills and support.",
     primary: { label: "Bring an Initiative", href: "/contact-us" } satisfies NavLink,
     secondary: null,
+    image: {
+      src: "/images/youthlink/initiative-banner-1024.jpg",
+      srcSet:
+        "/images/youthlink/initiative-banner-512.jpg 512w, /images/youthlink/initiative-banner-1024.jpg 1024w",
+      alt: "Young people raising their hands beneath Pakistan's crescent and star",
+      width: 1024,
+      height: 576,
+    } satisfies FramerImage,
   },
 } as const;
 
