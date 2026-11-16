@@ -42,7 +42,10 @@ export const site = {
         "/images/youthlink/initiative-banner-512.jpg 512w, /images/youthlink/initiative-banner-1024.jpg 1024w",
       alt: "Young people raising their hands beneath Pakistan's crescent and star",
       width: 1024,
-      height: 576,
+      height: 1024,
+      // Square picture in a wide block: this keeps the raised hands in view on desktop,
+      // while the tall phone block shows the whole picture.
+      objectPosition: "50% 43%",
     } satisfies FramerImage,
   },
 } as const;

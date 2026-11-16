@@ -20,7 +20,10 @@ export interface CtaContent {
   primary?: NavLink;
   /** `null` hides the secondary button. */
   secondary?: NavLink | null;
-  /** Background photo; omitted, the block keeps the template's photo. */
+  /**
+   * Background photo; omitted, the block keeps the template's photo. Its `objectPosition`,
+   * when set, replaces the block's own placement.
+   */
   image?: FramerImage;
 }
 
@@ -357,7 +360,7 @@ function CtaImage({ bp, content = {} }: { bp: Breakpoint; content?: CtaContent }
                     height: "100%",
                     borderRadius: "inherit",
                     cornerShape: "inherit",
-                    objectPosition: phone ? "center 40%" : "center top",
+                    objectPosition: image.objectPosition ?? (phone ? "center 40%" : "center top"),
                     objectFit: "cover",
                   }}
                 />
