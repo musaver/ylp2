@@ -26,12 +26,12 @@ export const memberJourney: MissionPoint[] = [
 
 /** Side photo of the "Member journey" section on the home page. */
 export const memberJourneyImage: FramerImage = {
-  src: "/images/dvIaPjGj7h6pAC74fvlOA1phULs.jpg",
+  src: "/images/youthlink/member-journey-685.jpg",
   srcSet:
-    "/images/dvIaPjGj7h6pAC74fvlOA1phULs-1.jpg 682w, /images/dvIaPjGj7h6pAC74fvlOA1phULs-2.jpg 1365w, /images/dvIaPjGj7h6pAC74fvlOA1phULs-3.jpg 2730w, /images/dvIaPjGj7h6pAC74fvlOA1phULs.jpg 4105w",
-  alt: "Young members working together at computers",
-  width: 4105,
-  height: 6157,
+    "/images/youthlink/member-journey-512.jpg 512w, /images/youthlink/member-journey-685.jpg 685w",
+  alt: "Hands fitting gears together on a wooden table",
+  width: 685,
+  height: 1023,
 };
 
 /** Accordion items in the "Our mission" section (home, why choose us). */

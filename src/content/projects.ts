@@ -2,12 +2,12 @@ import type { FramerImage, Project } from "@/lib/types";
 
 const IMAGES = {
   study: {
-    src: "/images/1bLhHGOsrf1C27vwqjzNF20OuUE.jpg",
-    alt: "Students learning together",
-    width: 5088,
-    height: 3392,
+    src: "/images/youthlink/school-of-islam-808.jpg",
+    alt: "Men gathered in conversation inside a mosque",
+    width: 808,
+    height: 505,
     srcSet:
-      "/images/1bLhHGOsrf1C27vwqjzNF20OuUE-1.jpg 512w, /images/1bLhHGOsrf1C27vwqjzNF20OuUE-2.jpg 1024w, /images/1bLhHGOsrf1C27vwqjzNF20OuUE-3.jpg 2048w, /images/1bLhHGOsrf1C27vwqjzNF20OuUE.jpg 5088w",
+      "/images/youthlink/school-of-islam-512.jpg 512w, /images/youthlink/school-of-islam-808.jpg 808w",
   },
   writing: {
     src: "/images/3kl372mTbhfjKKkU1JVkrrfao.jpg",
@@ -34,12 +34,12 @@ const IMAGES = {
       "/images/uFNum3eRYWZ5A7Q9lwA3Ensg3k-1.jpg 512w, /images/uFNum3eRYWZ5A7Q9lwA3Ensg3k-2.jpg 1024w, /images/uFNum3eRYWZ5A7Q9lwA3Ensg3k-3.jpg 2048w, /images/uFNum3eRYWZ5A7Q9lwA3Ensg3k-4.jpg 4096w, /images/uFNum3eRYWZ5A7Q9lwA3Ensg3k.jpg 6016w",
   },
   team: {
-    src: "/images/YFnDJEKqKseTmq6aAp6wA6mnyGE.jpg",
-    alt: "Team joining hands",
-    width: 7624,
-    height: 5085,
+    src: "/images/youthlink/quad-solutions-808.jpg",
+    alt: "Two men shaking hands",
+    width: 808,
+    height: 505,
     srcSet:
-      "/images/YFnDJEKqKseTmq6aAp6wA6mnyGE-1.jpg 512w, /images/YFnDJEKqKseTmq6aAp6wA6mnyGE-2.jpg 1024w, /images/YFnDJEKqKseTmq6aAp6wA6mnyGE-3.jpg 2048w, /images/YFnDJEKqKseTmq6aAp6wA6mnyGE-4.jpg 4096w, /images/YFnDJEKqKseTmq6aAp6wA6mnyGE.jpg 7624w",
+      "/images/youthlink/quad-solutions-512.jpg 512w, /images/youthlink/quad-solutions-808.jpg 808w",
   },
   portrait: {
     src: "/images/hMKseFGukPKk9f7zR5kGXXyfnLw.jpg",
