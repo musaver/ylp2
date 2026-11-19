@@ -1,6 +1,5 @@
 import { Cta } from "@/components/layout/Cta";
 import { PageShell } from "@/components/layout/PageShell";
-import { AchievementsSection } from "@/components/sections/AchievementsSection";
 import { ProjectsHighlight } from "@/components/sections/ProjectsHighlight";
 import { CommitmentsSection } from "@/components/pages/home/CommitmentsSection";
 import { HomeAbout } from "@/components/pages/home/HomeAbout";
@@ -8,7 +7,6 @@ import { HomeBanner } from "@/components/pages/home/HomeBanner";
 import { MissionSection } from "@/components/pages/home/MissionSection";
 import { WhatWeBelieve } from "@/components/pages/our-mission/WhatWeBelieve";
 import { WhatWeStandFor } from "@/components/pages/our-mission/WhatWeStandFor";
-import { achievements } from "@/content/achievements";
 import { beliefs, memberJourney, memberJourneyImage } from "@/content/mission";
 import { site } from "@/content/site";
 import { vision } from "@/content/vision";
@@ -48,7 +46,6 @@ export default function HomePage() {
       <ProjectsHighlight projects={getProjects()} />
       {/* "Bring a new initiative" CTA. Its layout CSS orders it above the footer, so reset it. */}
       <Cta variant="image" content={site.initiativeCta} style={{ order: 0 }} />
-      <AchievementsSection className="framer-2gu5qk" items={achievements} variant="home" />
       <MissionSection
         items={memberJourney}
         label="Member journey"
