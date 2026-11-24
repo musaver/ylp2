@@ -18,9 +18,6 @@ const CONTACT_IMAGE: FramerImage = {
 const CONTACT_IMAGE_SIZES =
   "(min-width: 1280px) max((min(max(100vw, 1px), 1340px) - 120px) / 2, 1px), (min-width: 992px) and (max-width: 1279.98px) max((min(max(100vw, 1px), 1340px) - 80px) / 2, 1px), (max-width: 991.98px) calc(min(max(100vw, 1px), 1340px) - 40px)";
 
-/** Google Maps link of the address, as in the export. */
-const DEFAULT_MAP_URL = "https://maps.app.goo.gl/sDRGCdX5PnYbKszW8";
-
 /** Breakpoint wrappers of the /contact-us template (desktop+tablet vs phone). */
 const NOT_PHONE = "ssr-variant hidden-ce8ap0";
 const PHONE_ONLY = "ssr-variant hidden-1izvhu1 hidden-175saz8";
@@ -157,12 +154,10 @@ function InfoItem({
 }
 
 export interface ContactInfoProps {
-  /** Address, phone and email (site.contact). */
-  contact: { address: string; phone: string; email: string };
+  /** Contact email (site.contact). */
+  contact: { email: string };
   /** Social profiles (site.socials); rendered in the export's order: Facebook, YouTube, Instagram. */
   socials: readonly SocialLink[];
-  /** Map link of the address. */
-  mapUrl?: string;
   label?: string;
   heading?: string;
   text?: string;
@@ -171,12 +166,11 @@ export interface ContactInfoProps {
 
 /**
  * Framer's "Contact Us Section" (hash 7e75212f7c, section.framer-1nb511x) of /contact-us:
- * image, "/ Get in touch /" label, heading and text, address / phone / email and social buttons.
+ * image, "/ Get in touch /" label, heading and text, email and social buttons.
  */
 export function ContactInfo({
   contact,
   socials,
-  mapUrl = DEFAULT_MAP_URL,
   label = "Get in touch",
   heading = "We're here for you and happy to help",
   text = "At YouthLink, we believe in the power of togetherness and strive to make every person feel supported, hopeful, and embraced.",
@@ -269,24 +263,6 @@ export function ContactInfo({
               </div>
             </div>
             <div className="framer-jihgme" data-framer-name="Contact Info Wrapper">
-              <InfoItem
-                className="framer-1wkzhz7"
-                name="Address Info"
-                labelClassName="framer-1g2swym"
-                valueClassName="framer-1gujp1r"
-                label="Address"
-                value={contact.address}
-                href={mapUrl}
-              />
-              <InfoItem
-                className="framer-pbn54d"
-                name="Phone Info"
-                labelClassName="framer-2fg5uc"
-                valueClassName="framer-sukrz3"
-                label="Phone"
-                value={contact.phone}
-                href={`tel: ${contact.phone}`}
-              />
               <InfoItem
                 className="framer-x0w180"
                 name="Email Info"

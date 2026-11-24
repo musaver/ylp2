@@ -15,9 +15,7 @@ export const site = {
   tagline: "Together, we have the power to change lives.",
   copyright: "© YouthLink. All Rights Reserved.",
   contact: {
-    address: "14 Tottenham Road, London, England",
-    phone: "+1 000 33 44 564",
-    email: "youthlink@example.com",
+    email: "contact@youthlinkpakistan.com",
   },
   socials: [
     { name: "instagram", href: "https://www.instagram.com" },
