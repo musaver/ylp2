@@ -12,73 +12,6 @@ function projectPhoto(slug: string, alt: string): FramerImage {
   };
 }
 
-const IMAGES = {
-  study: {
-    src: "/images/youthlink/school-of-islam-808.jpg",
-    alt: "Men gathered in conversation inside a mosque",
-    width: 808,
-    height: 505,
-    srcSet:
-      "/images/youthlink/school-of-islam-512.jpg 512w, /images/youthlink/school-of-islam-808.jpg 808w",
-  },
-  writing: {
-    src: "/images/3kl372mTbhfjKKkU1JVkrrfao.jpg",
-    alt: "Writer working at a desk",
-    width: 5573,
-    height: 3715,
-    srcSet:
-      "/images/3kl372mTbhfjKKkU1JVkrrfao-1.jpg 512w, /images/3kl372mTbhfjKKkU1JVkrrfao-2.jpg 1024w, /images/3kl372mTbhfjKKkU1JVkrrfao-3.jpg 2048w, /images/3kl372mTbhfjKKkU1JVkrrfao.jpg 5573w",
-  },
-  studio: {
-    src: "/images/NJEMt1gATb3BUK40oGjEJ1eXR4Y.jpg",
-    alt: "Team working on a media production",
-    width: 6141,
-    height: 4098,
-    srcSet:
-      "/images/NJEMt1gATb3BUK40oGjEJ1eXR4Y-1.jpg 512w, /images/NJEMt1gATb3BUK40oGjEJ1eXR4Y-2.jpg 1024w, /images/NJEMt1gATb3BUK40oGjEJ1eXR4Y-3.jpg 2048w, /images/NJEMt1gATb3BUK40oGjEJ1eXR4Y.jpg 6141w",
-  },
-  conversation: {
-    src: "/images/uFNum3eRYWZ5A7Q9lwA3Ensg3k.jpg",
-    alt: "Two people in conversation",
-    width: 6016,
-    height: 4016,
-    srcSet:
-      "/images/uFNum3eRYWZ5A7Q9lwA3Ensg3k-1.jpg 512w, /images/uFNum3eRYWZ5A7Q9lwA3Ensg3k-2.jpg 1024w, /images/uFNum3eRYWZ5A7Q9lwA3Ensg3k-3.jpg 2048w, /images/uFNum3eRYWZ5A7Q9lwA3Ensg3k-4.jpg 4096w, /images/uFNum3eRYWZ5A7Q9lwA3Ensg3k.jpg 6016w",
-  },
-  team: {
-    src: "/images/youthlink/quad-solutions-808.jpg",
-    alt: "Two men shaking hands",
-    width: 808,
-    height: 505,
-    srcSet:
-      "/images/youthlink/quad-solutions-512.jpg 512w, /images/youthlink/quad-solutions-808.jpg 808w",
-  },
-  portrait: {
-    src: "/images/hMKseFGukPKk9f7zR5kGXXyfnLw.jpg",
-    alt: "Portrait of a young woman",
-    width: 3456,
-    height: 4089,
-    srcSet:
-      "/images/hMKseFGukPKk9f7zR5kGXXyfnLw-1.jpg 865w, /images/hMKseFGukPKk9f7zR5kGXXyfnLw-2.jpg 1731w, /images/hMKseFGukPKk9f7zR5kGXXyfnLw.jpg 3456w",
-  },
-  youth: {
-    src: "/images/LR0EK4pQta6YES1duB2D9B20XM0.jpg",
-    alt: "Young members together",
-    width: 3936,
-    height: 2624,
-    srcSet:
-      "/images/LR0EK4pQta6YES1duB2D9B20XM0-1.jpg 512w, /images/LR0EK4pQta6YES1duB2D9B20XM0-2.jpg 1024w, /images/LR0EK4pQta6YES1duB2D9B20XM0-3.jpg 2048w, /images/LR0EK4pQta6YES1duB2D9B20XM0.jpg 3936w",
-  },
-  workshop: {
-    src: "/images/HZnWRBUr8AE6TiztMetlYHvobk8.jpg",
-    alt: "Group working together in a workshop",
-    width: 6000,
-    height: 4000,
-    srcSet:
-      "/images/HZnWRBUr8AE6TiztMetlYHvobk8-1.jpg 512w, /images/HZnWRBUr8AE6TiztMetlYHvobk8-2.jpg 1024w, /images/HZnWRBUr8AE6TiztMetlYHvobk8-3.jpg 2048w, /images/HZnWRBUr8AE6TiztMetlYHvobk8.jpg 6000w",
-  },
-} satisfies Record<string, FramerImage>;
-
 /** Projects in the order they appear on the home page and the /projects page. */
 export const projects: Project[] = [
   {
@@ -129,7 +62,6 @@ export const projects: Project[] = [
         text: "Strong foundations make strong contributors. School of Islam helps every member grow in knowledge and character before and alongside their wider work.",
       },
     ],
-    gallery: [IMAGES.youth, IMAGES.workshop],
   },
   {
     slug: "nahal",
@@ -180,7 +112,6 @@ export const projects: Project[] = [
         text: "Ideas shape communities. Nahal helps members develop the voice and skill to contribute ideas that matter.",
       },
     ],
-    gallery: [IMAGES.study, IMAGES.conversation],
   },
   {
     slug: "mashal",
@@ -231,7 +162,6 @@ export const projects: Project[] = [
         text: "How a message is told matters. Mashal works to make sure Islam is presented as it is: a source of meaning, direction and solutions.",
       },
     ],
-    gallery: [IMAGES.portrait, IMAGES.workshop],
   },
   {
     slug: "muhawil",
@@ -282,7 +212,6 @@ export const projects: Project[] = [
         text: "Influence is a responsibility. Muhawil prepares members to carry it with confidence, clarity and integrity.",
       },
     ],
-    gallery: [IMAGES.studio, IMAGES.youth],
   },
   {
     slug: "quad-solutions",
@@ -333,7 +262,6 @@ export const projects: Project[] = [
         text: "Strong businesses build strong communities. QUAD Solutions puts skills and support where they make a practical difference.",
       },
     ],
-    gallery: [IMAGES.workshop, IMAGES.conversation],
   },
   {
     slug: "youthlink-media",
@@ -384,6 +312,5 @@ export const projects: Project[] = [
         text: "Every project has a story worth telling. YouthLink Media makes sure ours is told clearly and well.",
       },
     ],
-    gallery: [IMAGES.studio, IMAGES.team],
   },
 ];
