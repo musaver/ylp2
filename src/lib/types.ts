@@ -29,7 +29,7 @@ export interface NavLink {
 }
 
 export interface SocialLink {
-  name: "instagram" | "youtube" | "facebook";
+  name: "facebook" | "x" | "instagram" | "youtube" | "whatsapp";
   href: string;
 }
 

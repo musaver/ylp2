@@ -26,10 +26,37 @@ const PHONE_ONLY = "ssr-variant hidden-1izvhu1 hidden-175saz8";
  * Social buttons of this section, in the export's order. The instance wrapper classes are
  * positional, the icon class identifies the network.
  */
-const SOCIAL_SLOTS: { name: SocialLink["name"]; container: string; icon: string }[] = [
-  { name: "facebook", container: "framer-19ujepi-container", icon: "framer-H03vJ framer-nbf0pr" },
-  { name: "youtube", container: "framer-1q6gem4-container", icon: "framer-jWDNt framer-nbf0pr" },
-  { name: "instagram", container: "framer-1cucdi1-container", icon: "framer-a6Ejj framer-nbf0pr" },
+const SOCIAL_SLOTS: {
+  name: SocialLink["name"];
+  label: string;
+  container: string;
+  icon: string;
+}[] = [
+  {
+    name: "facebook",
+    label: "Facebook",
+    container: "framer-19ujepi-container",
+    icon: "framer-H03vJ framer-nbf0pr",
+  },
+  { name: "x", label: "X", container: "framer-19ujepi-container", icon: "yl-icon-x framer-nbf0pr" },
+  {
+    name: "instagram",
+    label: "Instagram",
+    container: "framer-1cucdi1-container",
+    icon: "framer-a6Ejj framer-nbf0pr",
+  },
+  {
+    name: "youtube",
+    label: "YouTube",
+    container: "framer-1q6gem4-container",
+    icon: "framer-jWDNt framer-nbf0pr",
+  },
+  {
+    name: "whatsapp",
+    label: "WhatsApp",
+    container: "framer-1q6gem4-container",
+    icon: "yl-icon-whatsapp framer-nbf0pr",
+  },
 ];
 
 const SOCIAL_STYLE: CSSProperties = {
@@ -156,7 +183,7 @@ function InfoItem({
 export interface ContactInfoProps {
   /** Contact email (site.contact). */
   contact: { email: string };
-  /** Social profiles (site.socials); rendered in the export's order: Facebook, YouTube, Instagram. */
+  /** Social profiles (site.socials); shown as Facebook, X, Instagram, YouTube, WhatsApp. */
   socials: readonly SocialLink[];
   label?: string;
   heading?: string;
@@ -284,6 +311,7 @@ export function ContactInfo({
                     href={slot.href}
                     target="_blank"
                     rel="noopener"
+                    aria-label={slot.label}
                     style={SOCIAL_STYLE}
                   >
                     <div
@@ -300,6 +328,7 @@ export function ContactInfo({
                     href={slot.href}
                     target="_blank"
                     rel="noopener"
+                    aria-label={slot.label}
                     style={SOCIAL_STYLE}
                   >
                     <div

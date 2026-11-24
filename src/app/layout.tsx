@@ -6,6 +6,7 @@ import { ScrollReveal } from "@/components/runtime/ScrollReveal";
 import { ScrollToTop } from "@/components/runtime/ScrollToTop";
 import "@/styles/framer.css";
 import "@/styles/interactions.css";
+import "@/styles/social-icons.css";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
