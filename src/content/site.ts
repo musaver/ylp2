@@ -18,9 +18,14 @@ export const site = {
     email: "contact@youthlinkpakistan.com",
   },
   socials: [
-    { name: "instagram", href: "https://www.instagram.com" },
-    { name: "youtube", href: "https://www.youtube.com" },
-    { name: "facebook", href: "https://www.facebook.com" },
+    { name: "facebook", href: "https://web.facebook.com/youthlinkpakistan/" },
+    { name: "x", href: "https://x.com/YLyouthlinkstc" },
+    { name: "instagram", href: "https://www.instagram.com/youthlinkpakistan" },
+    { name: "youtube", href: "https://www.youtube.com/@YouthLinkpakistan" },
+    {
+      name: "whatsapp",
+      href: "https://api.whatsapp.com/send?text=*YouthlinkPakistan*%0A%0Ahttps://youthlinkpakistan.com/",
+    },
   ] satisfies SocialLink[],
   cta: {
     text: "Your support can change lives. Whether you’re donating, volunteering, or partnering with us, every action counts.",

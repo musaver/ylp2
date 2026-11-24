@@ -26,10 +26,32 @@ const FRAMER_NAME: Record<Breakpoint, string> = {
   phone: "Phone",
 };
 
-const SOCIALS: Record<SocialLink["name"], { container: string; icon: string }> = {
-  instagram: { container: "framer-s47w6i-container", icon: "framer-a6Ejj framer-nbf0pr" },
-  youtube: { container: "framer-qdmj6x-container", icon: "framer-jWDNt framer-nbf0pr" },
-  facebook: { container: "framer-2lphzd-container", icon: "framer-H03vJ framer-nbf0pr" },
+/** Per network: the 32px button wrapper class (all share one rule) and the icon class. */
+const SOCIALS: Record<
+  SocialLink["name"],
+  { label: string; container: string; icon: string }
+> = {
+  facebook: {
+    label: "Facebook",
+    container: "framer-2lphzd-container",
+    icon: "framer-H03vJ framer-nbf0pr",
+  },
+  x: { label: "X", container: "framer-2lphzd-container", icon: "yl-icon-x framer-nbf0pr" },
+  instagram: {
+    label: "Instagram",
+    container: "framer-s47w6i-container",
+    icon: "framer-a6Ejj framer-nbf0pr",
+  },
+  youtube: {
+    label: "YouTube",
+    container: "framer-qdmj6x-container",
+    icon: "framer-jWDNt framer-nbf0pr",
+  },
+  whatsapp: {
+    label: "WhatsApp",
+    container: "framer-qdmj6x-container",
+    icon: "yl-icon-whatsapp framer-nbf0pr",
+  },
 };
 
 /**
@@ -177,6 +199,7 @@ function FooterVariant({ bp }: { bp: Breakpoint }) {
                       href={social.href}
                       target="_blank"
                       rel="noopener"
+                      aria-label={SOCIALS[social.name].label}
                       style={{
                         backgroundColor: YELLOW,
                         height: "100%",

@@ -8,12 +8,19 @@ export interface EmailField {
   value: string;
 }
 
+/** A file attached to the notification email (base64 content). */
+export interface EmailAttachment {
+  name: string;
+  content: string;
+}
+
 export interface FormEmail {
   /** Email subject, e.g. "YouthLink joining form". */
   subject: string;
-  /** The visitor who submitted the form; replies go to them. */
+  /** The visitor who submitted the form; replies go to them when they gave an email. */
   from: { name: string; email: string };
   fields: EmailField[];
+  attachments?: EmailAttachment[];
 }
 
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
@@ -37,10 +44,11 @@ function recipients(): { email: string }[] {
 }
 
 function buildBodies({ subject, from, fields }: FormEmail) {
+  const sender = from.email ? `${from.name} <${from.email}>` : from.name;
   const footer = `This is a notification that a form was submitted on your website (${site.name} ${site.url}).`;
 
   const text = [
-    `From: ${from.name} <${from.email}>`,
+    `From: ${sender}`,
     `Subject: ${subject}`,
     "",
     "Message Body:",
@@ -53,7 +61,7 @@ function buildBodies({ subject, from, fields }: FormEmail) {
   const line = (label: string, value: string) =>
     `<div><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value).replace(/\n/g, "<br>")}</div>`;
   const html = `<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.7;color:#111">
-${line("From", `${from.name} <${from.email}>`)}
+${line("From", sender)}
 ${line("Subject", subject)}
 <br>
 <div><strong>Message Body:</strong></div>
@@ -93,10 +101,11 @@ export async function sendFormEmail(email: FormEmail): Promise<boolean> {
       body: JSON.stringify({
         sender: { name: process.env.FORM_FROM_NAME || "YouthlinkPakistan", email: senderEmail },
         to,
-        replyTo: { name: email.from.name, email: email.from.email },
+        ...(email.from.email ? { replyTo: { name: email.from.name, email: email.from.email } } : {}),
         subject: email.subject,
         textContent: text,
         htmlContent: html,
+        ...(email.attachments?.length ? { attachment: email.attachments } : {}),
       }),
       signal: AbortSignal.timeout(15_000),
     });
