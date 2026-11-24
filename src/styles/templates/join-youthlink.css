@@ -191,3 +191,9 @@
     padding-top: 0;
   }
 }
+
+/* Error under the submit button when the submission could not be sent (no specific field). */
+.framer-ZYNLF .framer-text.form-send-error {
+  --framer-text-color: #b42318;
+  width: 100%;
+}

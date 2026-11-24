@@ -348,7 +348,10 @@ function groupIsValid(form: HTMLFormElement, name: string): boolean {
  * bubble. On success the form is reset and the submit button reads "Thank you!" for 3 s.
  */
 export function JoinForm({ note }: { note?: ReactNode }) {
-  const [state, formAction] = useActionState<JoinState, FormData>(submitJoinApplication, null);
+  const [state, formAction, pending] = useActionState<JoinState, FormData>(
+    submitJoinApplication,
+    null,
+  );
   const formRef = useRef<HTMLFormElement>(null);
   const fullNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -389,13 +392,18 @@ export function JoinForm({ note }: { note?: ReactNode }) {
     }
   }, [state]);
 
-  const label = state?.ok && expired !== state ? "Thank you!" : "Submit application";
+  const label = pending
+    ? "Sending..."
+    : state?.ok && expired !== state
+      ? "Thank you!"
+      : "Submit application";
 
   // Submit through a transition instead of the form `action` prop: React would otherwise reset
   // the fields when the action reports an error, and would add hidden `$ACTION_*` inputs and
   // method/encType attributes to Framer's form markup.
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pending) return;
     const form = event.currentTarget;
     if (!groupIsValid(form, "interests") || !groupIsValid(form, "involvement")) return;
     const formData = new FormData(form);
@@ -552,6 +560,16 @@ export function JoinForm({ note }: { note?: ReactNode }) {
             <SubmitButton variant="phone" label={label} />
           </div>
         </div>
+        {state && !state.ok && !state.field ? (
+          <p
+            role="alert"
+            className="framer-text framer-styles-preset-1dpgexf form-send-error"
+            data-styles-preset="wUYf66_Db"
+            dir="auto"
+          >
+            {state.error}
+          </p>
+        ) : null}
         <HoneypotInputs />
       </form>
     </JoinFormSection>

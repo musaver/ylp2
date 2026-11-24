@@ -7,6 +7,8 @@ import {
   STATUS_OPTIONS,
   TIME_OPTIONS,
 } from "@/components/pages/join/options";
+import { markEmailSent, saveJoinApplication } from "@/lib/db";
+import { SEND_FAILED_MESSAGE, sendFormEmail } from "@/lib/email";
 
 /** Field the validation error refers to, so the form can point the browser at it. */
 export type JoinField =
@@ -133,6 +135,33 @@ export async function submitJoinApplication(
     };
   }
 
-  // TODO: deliver to an email/CRM provider
+  // Save first so nothing is lost if the email fails; the email goes out either way.
+  const savedId = await saveJoinApplication(application);
+  const sent = await sendFormEmail({
+    subject: "YouthLink joining form",
+    from: { name: application.fullName, email: application.email },
+    fields: [
+      { label: "Full name", value: application.fullName },
+      { label: "Email", value: application.email },
+      { label: "Phone / WhatsApp", value: application.phone },
+      { label: "City or area", value: application.city },
+      { label: "Age", value: application.age },
+      { label: "Currently", value: application.status },
+      { label: "University, institution or workplace", value: application.organisation },
+      { label: "Areas of interest", value: application.interests.join(", ") },
+      { label: "Skills and experience", value: application.skills },
+      { label: "Why join / hope to contribute", value: application.motivation },
+      { label: "Time per week", value: application.time },
+      { label: "How to get involved", value: application.involvement.join(", ") },
+      { label: "Consent", value: "Yes" },
+    ],
+  });
+  if (savedId !== null && sent) {
+    await markEmailSent("join_applications", savedId);
+  }
+  // Only a submission that was neither saved nor emailed is lost.
+  if (savedId === null && !sent) {
+    return { ok: false, error: SEND_FAILED_MESSAGE };
+  }
   return { ok: true };
 }

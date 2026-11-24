@@ -1,6 +1,8 @@
 "use server";
 
 import { findCategory } from "@/components/pages/feedback/options";
+import { markEmailSent, saveFeedback } from "@/lib/db";
+import { SEND_FAILED_MESSAGE, sendFormEmail } from "@/lib/email";
 
 /** Field the validation error refers to, so the form can point the browser at it. */
 export type FeedbackField = "category" | "topic" | "fullName" | "email" | "body";
@@ -37,11 +39,25 @@ function text(value: FormDataEntryValue | null | undefined): string {
 
 /** Handles the /feedback form. Submissions are never displayed publicly. */
 export async function submitFeedback(
+  prevState: FeedbackState,
+  formData: FormData,
+): Promise<FeedbackState> {
+  const result = await handleFeedback(prevState, formData);
+  if (result && !result.ok && result.field) {
+    // Field name only: never log what the visitor typed.
+    console.warn(`[feedback] Rejected: invalid ${result.field}`);
+  }
+  return result;
+}
+
+async function handleFeedback(
   _prevState: FeedbackState,
   formData: FormData,
 ): Promise<FeedbackState> {
   // Bots fill the hidden honeypot inputs: pretend success and drop the submission.
-  if (HONEYPOT_FIELDS.some((name) => text(formData.get(name)) !== "")) {
+  const trapped = HONEYPOT_FIELDS.filter((name) => text(formData.get(name)) !== "");
+  if (trapped.length > 0) {
+    console.warn(`[feedback] Dropped as spam: hidden field(s) filled: ${trapped.join(", ")}`);
     return { ok: true };
   }
 
@@ -85,6 +101,26 @@ export async function submitFeedback(
     };
   }
 
-  // TODO: store securely and notify the authorised YouthLink review team (email/CRM provider)
+  // Save first so nothing is lost if the email fails; the email goes out either way.
+  const savedId = await saveFeedback({ ...submission, category: category.value });
+  const sent = await sendFormEmail({
+    subject: `YouthLink ${category.value === "Feedback" ? "feedback" : "complaint"} form`,
+    from: { name: submission.fullName, email: submission.email },
+    fields: [
+      { label: "Type", value: category.value },
+      { label: "About", value: submission.topic },
+      { label: "Full name", value: submission.fullName },
+      { label: "Email", value: submission.email },
+      { label: "Phone", value: submission.phone },
+      { label: "Message", value: submission.body },
+    ],
+  });
+  if (savedId !== null && sent) {
+    await markEmailSent("feedback_submissions", savedId);
+  }
+  // Only a submission that was neither saved nor emailed is lost.
+  if (savedId === null && !sent) {
+    return { ok: false, error: SEND_FAILED_MESSAGE };
+  }
   return { ok: true };
 }

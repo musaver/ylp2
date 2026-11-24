@@ -36,7 +36,10 @@ type FieldElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
  * validation bubble, and on success the form is reset and a confirmation message is shown.
  */
 export function FeedbackForm({ note }: { note?: ReactNode }) {
-  const [state, formAction] = useActionState<FeedbackState, FormData>(submitFeedback, null);
+  const [state, formAction, pending] = useActionState<FeedbackState, FormData>(
+    submitFeedback,
+    null,
+  );
   const [category, setCategory] = useState("");
   /** The successful result whose "Thank you!" label has already timed out. */
   const [expired, setExpired] = useState<FeedbackState>(null);
@@ -71,11 +74,12 @@ export function FeedbackForm({ note }: { note?: ReactNode }) {
   }, [state]);
 
   const selected = findCategory(category);
-  const label = state?.ok && expired !== state ? "Thank you!" : "Send";
+  const label = pending ? "Sending..." : state?.ok && expired !== state ? "Thank you!" : "Send";
 
   // Submit through a transition instead of the form `action` prop, like the /join-youthlink form.
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pending) return;
     const formData = new FormData(event.currentTarget);
     startTransition(() => formAction(formData));
   }
@@ -222,6 +226,16 @@ export function FeedbackForm({ note }: { note?: ReactNode }) {
           >
             Thank you, your submission has been received. It will be reviewed by authorised
             YouthLink personnel, and we will contact you if we need more information.
+          </p>
+        ) : null}
+        {state && !state.ok && !state.field ? (
+          <p
+            role="alert"
+            className="framer-text framer-styles-preset-1dpgexf form-send-error"
+            data-styles-preset="wUYf66_Db"
+            dir="auto"
+          >
+            {state.error}
           </p>
         ) : null}
         <HoneypotInputs />
