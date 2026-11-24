@@ -1,5 +1,17 @@
 import type { FramerImage, Project } from "@/lib/types";
 
+/** Project card + detail-banner photo, served at 512–2400px wide (resized and compressed from the originals). */
+function projectPhoto(slug: string, alt: string): FramerImage {
+  const base = `/images/youthlink/project-${slug}`;
+  return {
+    src: `${base}-1600.jpg`,
+    alt,
+    width: 1600,
+    height: 893,
+    srcSet: [512, 1024, 1600, 2400].map((w) => `${base}-${w}.jpg ${w}w`).join(", "),
+  };
+}
+
 const IMAGES = {
   study: {
     src: "/images/youthlink/school-of-islam-808.jpg",
@@ -77,7 +89,7 @@ export const projects: Project[] = [
     excerpt: "Learning pathways in Quran, Seerah, Islamic worldview and personal development.",
     description:
       "Foundational learning and Tarbiyah through learning pathways in Quran, Seerah, Islamic worldview and personal development.",
-    image: IMAGES.study,
+    image: projectPhoto("school-of-islam", "A teacher leading a study circle with young students in a mosque"),
     body: [
       { type: "heading", level: 2, text: "Foundational learning and Tarbiyah for every member" },
       {
@@ -128,7 +140,7 @@ export const projects: Project[] = [
       "Developing trained and competent writers who can contribute through meaningful ideas and content.",
     description:
       "Writing and intellectual development: developing trained and competent writers who can contribute through meaningful ideas and content.",
-    image: IMAGES.writing,
+    image: projectPhoto("nahal", "Two women writing at a desk in a library"),
     body: [
       { type: "heading", level: 2, text: "Writing and intellectual development" },
       {
@@ -179,7 +191,7 @@ export const projects: Project[] = [
       "Building a serious public narrative around Islam as a source of meaning, direction and solutions.",
     description:
       "Media narrative building: a serious public narrative around Islam as a source of meaning, direction and solutions.",
-    image: IMAGES.studio,
+    image: projectPhoto("mashal", "Stacked screens reading “Narrative” in a media studio"),
     body: [
       { type: "heading", level: 2, text: "Building a serious public narrative around Islam" },
       {
@@ -230,7 +242,7 @@ export const projects: Project[] = [
       "Training people with an Islamic mindset for responsible public communication and influence.",
     description:
       "Influencer development: training people with an Islamic mindset for responsible public communication and influence.",
-    image: IMAGES.conversation,
+    image: projectPhoto("muhawil", "A speaker talking into a podcast microphone"),
     body: [
       { type: "heading", level: 2, text: "Influencer development with an Islamic mindset" },
       {
@@ -281,7 +293,7 @@ export const projects: Project[] = [
       "Supporting community businesses and start-ups through strategy, marketing, digital services and practical support.",
     description:
       "Community business support: helping community businesses and start-ups through strategy, marketing, digital services and practical support.",
-    image: IMAGES.team,
+    image: projectPhoto("quad-solutions", "Two people shaking hands in a meeting room"),
     body: [
       { type: "heading", level: 2, text: "Supporting community businesses and start-ups" },
       {
@@ -332,7 +344,7 @@ export const projects: Project[] = [
       "Producing content that explains YouthLink, School of Islam, their work and their public message.",
     description:
       "YouthLink and School of Islam media: producing content that explains YouthLink, School of Islam, their work and their public message.",
-    image: IMAGES.portrait,
+    image: projectPhoto("youthlink-media", "The YouthLink studio set with two armchairs and the YouthLink logo"),
     body: [
       { type: "heading", level: 2, text: "YouthLink and School of Islam media" },
       {

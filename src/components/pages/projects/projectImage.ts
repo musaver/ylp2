@@ -7,9 +7,7 @@ import type { Project } from "@/lib/types";
  * frame on both the /projects list card and the detail banner. `Project.image` has no
  * position field, so the value is kept here, keyed by slug.
  */
-const IMAGE_POSITION: Partial<Record<string, string>> = {
-  "youthlink-media": "50% 20%",
-};
+const IMAGE_POSITION: Partial<Record<string, string>> = {};
 
 /** The project thumbnail with its exported `object-position` (when it is not "center"). */
 export function projectImage(project: Project): PositionedImage {
