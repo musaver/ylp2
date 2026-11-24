@@ -15,9 +15,7 @@ export const site = {
   tagline: "Together, we have the power to change lives.",
   copyright: "© YouthLink. All Rights Reserved.",
   contact: {
-    address: "14 Tottenham Road, London, England",
-    phone: "+1 000 33 44 564",
-    email: "youthlink@example.com",
+    email: "contact@youthlinkpakistan.com",
   },
   socials: [
     { name: "instagram", href: "https://www.instagram.com" },
@@ -34,7 +32,10 @@ export const site = {
     label: "New initiatives",
     heading: "Bring a new initiative",
     text: "Have an initiative that can serve the Ummah and society? Bring your idea into the YouthLink network and explore how it can be developed with the right people, skills and support.",
-    primary: { label: "Bring an Initiative", href: "/contact-us" } satisfies NavLink,
+    primary: {
+      label: "Bring an Initiative",
+      href: "mailto:contact@youthlinkpakistan.com?subject=New%20initiative",
+    } satisfies NavLink,
     secondary: null,
     image: {
       src: "/images/youthlink/initiative-banner-1024.jpg",
@@ -70,15 +71,8 @@ export const mobileNav: NavLink[] = headerNav;
 
 /** Links in the footer. */
 export const footerNav: NavLink[] = [
-  { label: "About us", href: "/about-us" },
-  { label: "Leadership", href: "/leadership" },
-  { label: "Our mission", href: "/our-mission" },
-  { label: "Why choose us", href: "/why-choose-us" },
-  { label: "Causes", href: "/causes" },
+  { label: "Home", href: "/" },
   { label: "Projects", href: "/projects" },
-  { label: "Careers", href: "/career" },
-  { label: "Events", href: "/events" },
-  { label: "Resources", href: "/resources" },
+  { label: "Feedback and Complaint", href: "/feedback" },
   { label: "Join YouthLink", href: "/join-youthlink" },
-  { label: "Feedback", href: "/feedback" },
 ];

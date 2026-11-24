@@ -77,7 +77,6 @@ export interface Project {
   icon: string;
   image: FramerImage;
   body: RichBlock[];
-  gallery: FramerImage[];
 }
 
 export interface Job {
