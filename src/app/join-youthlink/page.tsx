@@ -9,8 +9,20 @@ import { ResourcesSection } from "@/components/sections/ResourcesSection";
 import { site } from "@/content/site";
 import { getProjects } from "@/lib/content";
 import { buildMetadata } from "@/lib/metadata";
+import type { FramerImage } from "@/lib/types";
 
 export const metadata = buildMetadata({ title: "Join YouthLink", path: "/join-youthlink" });
+
+const JOIN_IMAGE: FramerImage = {
+  src: "/images/youthlink/join-banner-1024.jpg",
+  srcSet:
+    "/images/youthlink/join-banner-512.jpg 512w, /images/youthlink/join-banner-1024.jpg 1024w, /images/youthlink/join-banner-1536.jpg 1536w",
+  alt: "Lantern in front of a mosque at sunset with a Joining button",
+  width: 1536,
+  height: 1024,
+  // The frame is near-square: anchor left so the lantern stays in view with the whole button.
+  objectPosition: "10% 50%",
+};
 
 /** Membership / initiative application page. Reuses the /contact-us template and styles. */
 export default function JoinYouthLinkPage() {
@@ -22,7 +34,7 @@ export default function JoinYouthLinkPage() {
       contentStyle={{ minHeight: "100vh", width: "auto", display: "contents" }}
     >
       <ContactBanner title="Join YouthLink" />
-      <ContactInfo contact={site.contact} socials={site.socials} />
+      <ContactInfo contact={site.contact} socials={site.socials} image={JOIN_IMAGE} />
       <JoinForm note={<JoinPrivacy />} />
       <ResourcesSection
         className="framer-17ut7hm"

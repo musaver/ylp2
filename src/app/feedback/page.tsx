@@ -10,8 +10,20 @@ import { ResourcesSection } from "@/components/sections/ResourcesSection";
 import { site } from "@/content/site";
 import { getProjects } from "@/lib/content";
 import { buildMetadata } from "@/lib/metadata";
+import type { FramerImage } from "@/lib/types";
 
 export const metadata = buildMetadata({ title: "Feedback and Complaint", path: "/feedback" });
+
+const FEEDBACK_IMAGE: FramerImage = {
+  src: "/images/youthlink/feedback-banner-1024.jpg",
+  srcSet:
+    "/images/youthlink/feedback-banner-512.jpg 512w, /images/youthlink/feedback-banner-1024.jpg 1024w, /images/youthlink/feedback-banner-1536.jpg 1536w",
+  alt: "Lantern in front of a mosque at sunset with a Complaint button",
+  width: 1536,
+  height: 1024,
+  // The frame is near-square: anchor left so the lantern stays in view with the whole button.
+  objectPosition: "10% 50%",
+};
 
 /** Feedback and complaint page. Reuses the /join-youthlink template and styles. */
 export default function FeedbackPage() {
@@ -23,7 +35,7 @@ export default function FeedbackPage() {
       contentStyle={{ minHeight: "100vh", width: "auto", display: "contents" }}
     >
       <ContactBanner title="Feedback and Complaint" />
-      <ContactInfo contact={site.contact} socials={site.socials} />
+      <ContactInfo contact={site.contact} socials={site.socials} image={FEEDBACK_IMAGE} />
       <FeedbackForm
         note={
           <JoinPrivacy>
