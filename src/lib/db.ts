@@ -8,20 +8,27 @@ function client() {
   return url ? neon(url) : null;
 }
 
-export interface JoinApplicationRow {
+export interface JoinRegistrationRow {
   fullName: string;
-  email: string;
-  phone: string;
+  age: number;
+  gender: string;
   city: string;
-  age: string;
-  status: string;
-  organisation: string;
-  interests: string[];
-  skills: string;
+  whatsapp: string;
+  email: string;
+  employment: string;
+  studies: string;
+  institution: string;
+  heardFrom: string;
+  expectations: string;
   motivation: string;
-  time: string;
-  involvement: string[];
-  consent: boolean;
+  leadership: number;
+  skills: string[];
+  portfolioNote: string;
+  portfolioFileName: string;
+  portfolioFileSize: number | null;
+  neverBecome: string;
+  youthInfluence: string;
+  comments: string;
 }
 
 export interface FeedbackRow {
@@ -38,8 +45,8 @@ function optional(value: string): string | null {
   return value === "" ? null : value;
 }
 
-/** Saves a Join YouthLink application. Returns its id, or null if it could not be saved. */
-export async function saveJoinApplication(row: JoinApplicationRow): Promise<number | null> {
+/** Saves a Join YouthLink registration. Returns its id, or null if it could not be saved. */
+export async function saveJoinRegistration(row: JoinRegistrationRow): Promise<number | null> {
   const sql = client();
   if (!sql) {
     console.error("[db] Not saved: set DATABASE_URL in the environment.");
@@ -47,18 +54,22 @@ export async function saveJoinApplication(row: JoinApplicationRow): Promise<numb
   }
   try {
     const result = await sql`
-      INSERT INTO join_applications (
-        full_name, email, phone, city, age, status, organisation, interests, skills,
-        motivation, time_commitment, involvement, consent
+      INSERT INTO join_registrations (
+        full_name, age, gender, city, whatsapp, email, employment, studies, institution,
+        heard_from, expectations, motivation, leadership_rating, skills, portfolio_note,
+        portfolio_file_name, portfolio_file_size, never_become, youth_influence, comments
       ) VALUES (
-        ${row.fullName}, ${row.email}, ${optional(row.phone)}, ${row.city}, ${row.age},
-        ${row.status}, ${optional(row.organisation)}, ${row.interests}, ${optional(row.skills)},
-        ${row.motivation}, ${row.time}, ${row.involvement}, ${row.consent}
+        ${row.fullName}, ${row.age}, ${row.gender}, ${row.city}, ${row.whatsapp},
+        ${optional(row.email)}, ${row.employment}, ${row.studies}, ${row.institution},
+        ${row.heardFrom}, ${row.expectations}, ${row.motivation}, ${row.leadership},
+        ${row.skills}, ${optional(row.portfolioNote)}, ${optional(row.portfolioFileName)},
+        ${row.portfolioFileSize}, ${optional(row.neverBecome)}, ${optional(row.youthInfluence)},
+        ${row.comments}
       )
       RETURNING id`;
     return Number(result[0]?.id);
   } catch (error) {
-    console.error("[db] Saving join application failed:", error);
+    console.error("[db] Saving join registration failed:", error);
     return null;
   }
 }
@@ -87,7 +98,7 @@ export async function saveFeedback(row: FeedbackRow): Promise<number | null> {
 
 /** Records that the notification email for a saved row went out. */
 export async function markEmailSent(
-  table: "join_applications" | "feedback_submissions",
+  table: "join_registrations" | "feedback_submissions",
   id: number,
 ): Promise<void> {
   const sql = client();

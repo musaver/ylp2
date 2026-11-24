@@ -9,19 +9,21 @@ import {
   type CSSProperties,
   type FormEvent,
   type ReactNode,
-  type Ref,
 } from "react";
 import {
   submitJoinApplication,
-  type JoinField,
   type JoinState,
 } from "@/app/join-youthlink/actions";
 import {
-  AGE_OPTIONS,
-  INTEREST_OPTIONS,
-  INVOLVEMENT_OPTIONS,
-  STATUS_OPTIONS,
-  TIME_OPTIONS,
+  DECLARATIONS,
+  EMPLOYMENT_OPTIONS,
+  GENDER_OPTIONS,
+  HEARD_FROM_OPTIONS,
+  LEADERSHIP_OPTIONS,
+  OTHER,
+  PORTFOLIO_EXTENSIONS,
+  PORTFOLIO_MAX_BYTES,
+  SKILL_OPTIONS,
 } from "@/components/pages/join/options";
 import { FramerBackgroundImage, REVEAL_STYLE, TOKENS } from "@/components/sections/framer-shared";
 import type { FramerImage } from "@/lib/types";
@@ -150,65 +152,115 @@ export function Field({ label, required, hint, width = "half", children }: Field
   );
 }
 
-interface SelectFieldProps extends Omit<FieldProps, "children"> {
-  name: string;
-  options: readonly string[];
-  inputRef: Ref<HTMLSelectElement>;
+/** Runs `onReset` when the form containing the returned ref is reset (clears local UI state). */
+function useFormReset<T extends HTMLElement>(onReset: () => void) {
+  const ref = useRef<T>(null);
+  const callback = useRef(onReset);
+  useEffect(() => {
+    callback.current = onReset;
+  });
+  useEffect(() => {
+    const form = ref.current?.closest("form");
+    if (!form) return;
+    const handle = () => callback.current();
+    form.addEventListener("reset", handle);
+    return () => form.removeEventListener("reset", handle);
+  }, []);
+  return ref;
 }
 
-/** Native select in the Framer input box. CSS greys it out while "Select..." is chosen. */
-function SelectField({ name, options, inputRef, ...field }: SelectFieldProps) {
+interface ChoiceGroupProps {
+  label: string;
+  name: string;
+  type: "radio" | "checkbox";
+  options: readonly string[];
+  required?: boolean;
+  hint?: string;
+  /** Lay the options out in one row (the 1–5 rating). */
+  inline?: boolean;
+}
+
+/**
+ * Radio or checkbox group. Choosing the "Other" option reveals a required text input named
+ * `${name}Other`. Required checkbox groups are checked in `handleSubmit` (browsers cannot require
+ * "at least one" box); the first box carries the validation message.
+ */
+function ChoiceGroup({ label, name, type, options, required, hint, inline }: ChoiceGroupProps) {
+  const [otherChecked, setOtherChecked] = useState(false);
+  const fieldsetRef = useFormReset<HTMLFieldSetElement>(() => setOtherChecked(false));
+
+  function handleChange(event: FormEvent<HTMLInputElement>) {
+    clearGroupValidity(event);
+    const box = event.currentTarget;
+    if (type === "checkbox") {
+      if (box.value === OTHER) setOtherChecked(box.checked);
+    } else {
+      setOtherChecked(box.value === OTHER);
+    }
+  }
+
   return (
-    <Field {...field}>
-      <div className={SELECT_WRAPPER}>
-        <select
-          ref={inputRef}
-          name={name}
-          required={field.required}
-          defaultValue=""
-          className="framer-form-input"
-          onChange={clearValidity}
-        >
-          <option value="">Select...</option>
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+    <fieldset ref={fieldsetRef} className={`join-choices${inline ? " join-choices-inline" : ""}`}>
+      <legend>
+        <FieldLabel text={label} required={required} />
+      </legend>
+      {hint ? <Hint text={hint} /> : null}
+      <div className="join-choice-list">
+        {options.map((option) => (
+          <label key={option} className="join-choice">
+            <input
+              type={type}
+              name={name}
+              value={option}
+              required={type === "radio" ? required : undefined}
+              className={`join-checkbox${type === "radio" ? " join-radio" : ""}`}
+              onChange={handleChange}
+            />
+            <span>{option === OTHER ? "Other:" : option}</span>
+          </label>
+        ))}
       </div>
-    </Field>
+      {otherChecked ? (
+        <div className={TEXT_INPUT_WRAPPER}>
+          <input
+            type="text"
+            name={`${name}Other`}
+            required
+            maxLength={200}
+            aria-label={`${label}: other`}
+            placeholder="Please specify"
+            className="framer-form-input"
+            defaultValue=""
+            onInput={clearValidity}
+          />
+        </div>
+      ) : null}
+    </fieldset>
   );
 }
 
-interface CheckboxGroupProps {
-  label: string;
-  name: string;
-  options: readonly string[];
-  firstRef: Ref<HTMLInputElement>;
-}
-
-/** Required "pick at least one" checkbox group. The first box carries the validation message. */
-function CheckboxGroup({ label, name, options, firstRef }: CheckboxGroupProps) {
+/** Textarea with a live word count, for answers with a suggested length. */
+function WordCountTextarea({ name, required }: { name: string; required?: boolean }) {
+  const [words, setWords] = useState(0);
+  const wrapperRef = useFormReset<HTMLDivElement>(() => setWords(0));
   return (
-    <fieldset className="join-choices">
-      <legend>
-        <FieldLabel text={label} required />
-      </legend>
-      {options.map((option, index) => (
-        <label key={option} className="join-choice">
-          <input
-            ref={index === 0 ? firstRef : undefined}
-            type="checkbox"
-            name={name}
-            value={option}
-            className="join-checkbox"
-            onChange={clearGroupValidity}
-          />
-          <span>{option}</span>
-        </label>
-      ))}
-    </fieldset>
+    <>
+      <div ref={wrapperRef} className={TEXTAREA_WRAPPER}>
+        <textarea
+          name={name}
+          required={required}
+          rows={7}
+          maxLength={3000}
+          className="framer-form-input"
+          onInput={(event) => {
+            clearValidity(event);
+            const text = event.currentTarget.value.trim();
+            setWords(text ? text.split(/\s+/).length : 0);
+          }}
+        ></textarea>
+      </div>
+      <Hint text={`${words} ${words === 1 ? "word" : "words"} (suggested 100–200)`} />
+    </>
   );
 }
 
@@ -338,14 +390,74 @@ function groupIsValid(form: HTMLFormElement, name: string): boolean {
   return false;
 }
 
+/** A plain text input in the Framer input box. */
+function TextInput({
+  name,
+  required,
+  type = "text",
+  autoComplete,
+  inputMode,
+  maxLength = 200,
+}: {
+  name: string;
+  required?: boolean;
+  type?: "text" | "email" | "tel";
+  autoComplete?: string;
+  inputMode?: "numeric";
+  maxLength?: number;
+}) {
+  return (
+    <div className={TEXT_INPUT_WRAPPER}>
+      <input
+        type={type}
+        name={name}
+        required={required}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
+        maxLength={maxLength}
+        className="framer-form-input"
+        defaultValue=""
+        onInput={clearValidity}
+      />
+    </div>
+  );
+}
+
+/** A textarea in the Framer input box. */
+function TextArea({
+  name,
+  required,
+  rows = 4,
+}: {
+  name: string;
+  required?: boolean;
+  rows?: number;
+}) {
+  return (
+    <div className={TEXTAREA_WRAPPER}>
+      <textarea
+        name={name}
+        required={required}
+        rows={rows}
+        maxLength={3000}
+        className="framer-form-input"
+        onInput={clearValidity}
+      ></textarea>
+    </div>
+  );
+}
+
+const PORTFOLIO_ACCEPT = PORTFOLIO_EXTENSIONS.join(",");
+const PORTFOLIO_MAX_MB = PORTFOLIO_MAX_BYTES / (1024 * 1024);
+
 /**
- * The /join-youthlink application form, built on the markup and styles of Framer's "Contact
- * Form Section" (section.framer-1ev6i0e) from /contact-us.
+ * The /join-youthlink registration form (the questions of the "Youthlink Registration Form" on
+ * Google Forms), built on the markup and styles of Framer's "Contact Form Section".
  *
  * The form posts to the `submitJoinApplication` server action. The browser enforces `required`
- * and `type="email"` first, the two checkbox groups are checked in `handleSubmit`, and errors
- * returned by the action are reported on the matching field with the browser's validation
- * bubble. On success the form is reset and the submit button reads "Thank you!" for 3 s.
+ * and `type="email"` first; the skills checkbox group and the portfolio file size are checked in
+ * `handleSubmit`. Errors returned by the action are reported on the matching field with the
+ * browser's validation bubble. On success the form is cleared, a confirmation is shown and the button reads "Thank you!".
  */
 export function JoinForm({ note }: { note?: ReactNode }) {
   const [state, formAction, pending] = useActionState<JoinState, FormData>(
@@ -353,39 +465,21 @@ export function JoinForm({ note }: { note?: ReactNode }) {
     null,
   );
   const formRef = useRef<HTMLFormElement>(null);
-  const fullNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const cityRef = useRef<HTMLInputElement>(null);
-  const ageRef = useRef<HTMLSelectElement>(null);
-  const statusRef = useRef<HTMLSelectElement>(null);
-  const interestsRef = useRef<HTMLInputElement>(null);
-  const motivationRef = useRef<HTMLTextAreaElement>(null);
-  const timeRef = useRef<HTMLSelectElement>(null);
-  const involvementRef = useRef<HTMLInputElement>(null);
-  const consentRef = useRef<HTMLInputElement>(null);
+  const confirmationRef = useRef<HTMLParagraphElement>(null);
   /** The successful result whose "Thank you!" label has already timed out. */
   const [expired, setExpired] = useState<JoinState>(null);
 
   useEffect(() => {
     if (!state) return;
     if (state.ok) {
+      // Clear in place: remounting the form would replay its hidden pre-reveal state.
       formRef.current?.reset();
+      confirmationRef.current?.focus();
       const timer = window.setTimeout(() => setExpired(state), THANK_YOU_MS);
       return () => window.clearTimeout(timer);
     }
-    const fields: Record<JoinField, FieldElement | null> = {
-      fullName: fullNameRef.current,
-      email: emailRef.current,
-      city: cityRef.current,
-      age: ageRef.current,
-      status: statusRef.current,
-      interests: interestsRef.current,
-      motivation: motivationRef.current,
-      time: timeRef.current,
-      involvement: involvementRef.current,
-      consent: consentRef.current,
-    };
-    const field = state.field ? fields[state.field] : null;
+    if (!state.field) return;
+    const field = formRef.current?.querySelector<FieldElement>(`[name="${state.field}"]`);
     if (field) {
       field.setCustomValidity(state.error);
       field.reportValidity();
@@ -405,152 +499,141 @@ export function JoinForm({ note }: { note?: ReactNode }) {
     event.preventDefault();
     if (pending) return;
     const form = event.currentTarget;
-    if (!groupIsValid(form, "interests") || !groupIsValid(form, "involvement")) return;
+    if (!groupIsValid(form, "skills")) return;
+    const file = form.querySelector<HTMLInputElement>('input[name="portfolio"]');
+    const chosen = file?.files?.[0];
+    if (file && chosen && chosen.size > PORTFOLIO_MAX_BYTES) {
+      file.setCustomValidity(`Please choose a file smaller than ${PORTFOLIO_MAX_MB} MB.`);
+      file.reportValidity();
+      return;
+    }
     const formData = new FormData(form);
     startTransition(() => formAction(formData));
   }
 
   return (
     <JoinFormSection note={note}>
-      <form ref={formRef} className="framer-1ddmkcf" style={REVEAL_STYLE} onSubmit={handleSubmit}>
+      <form
+        ref={formRef}
+        className="framer-1ddmkcf"
+        style={REVEAL_STYLE}
+        onSubmit={handleSubmit}
+      >
         <div className="framer-faxgzs" data-framer-name="Inputs Wrapper">
-          <Field label="Full name" required>
-            <div className={TEXT_INPUT_WRAPPER}>
-              <input
-                ref={fullNameRef}
-                type="text"
-                required
-                name="fullName"
-                autoComplete="name"
-                className="framer-form-input"
-                defaultValue=""
-                onInput={clearValidity}
-              />
-            </div>
+          <Field label="Name" required>
+            <TextInput name="fullName" required autoComplete="name" />
           </Field>
-          <Field label="Email address" required>
-            <div className={TEXT_INPUT_WRAPPER}>
-              <input
-                ref={emailRef}
-                type="email"
-                required
-                name="email"
-                autoComplete="email"
-                className="framer-form-input"
-                defaultValue=""
-                onInput={clearValidity}
-              />
-            </div>
+          <Field label="Age" required>
+            <TextInput name="age" required inputMode="numeric" maxLength={3} />
           </Field>
-          <Field
-            label="Phone or WhatsApp number"
-            hint="Optional, but it helps us reach you faster."
-          >
-            <div className={TEXT_INPUT_WRAPPER}>
-              <input
-                type="tel"
-                name="phone"
-                autoComplete="tel"
-                className="framer-form-input"
-                defaultValue=""
-              />
-            </div>
+          <ChoiceGroup label="Gender" name="gender" type="radio" options={GENDER_OPTIONS} required />
+          <Field label="Country/City" required>
+            <TextInput name="city" required autoComplete="address-level2" />
           </Field>
-          <Field label="City or area" required>
-            <div className={TEXT_INPUT_WRAPPER}>
-              <input
-                ref={cityRef}
-                type="text"
-                required
-                name="city"
-                autoComplete="address-level2"
-                className="framer-form-input"
-                defaultValue=""
-                onInput={clearValidity}
-              />
-            </div>
+          <Field label="WhatsApp Number (with country code)" required>
+            <TextInput name="whatsapp" type="tel" required autoComplete="tel" maxLength={30} />
           </Field>
-          <SelectField label="Age" required name="age" options={AGE_OPTIONS} inputRef={ageRef} />
-          <SelectField
-            label="I am currently"
+          <Field label="Email Address" width="full">
+            <TextInput name="email" type="email" autoComplete="email" />
+          </Field>
+          <ChoiceGroup
+            label="Current Employment Status"
+            name="employment"
+            type="radio"
+            options={EMPLOYMENT_OPTIONS}
             required
-            name="status"
-            options={STATUS_OPTIONS}
-            inputRef={statusRef}
           />
-          <Field label="University, institution or workplace" hint="Optional." width="full">
-            <div className={TEXT_INPUT_WRAPPER}>
-              <input
-                type="text"
-                name="organisation"
-                autoComplete="organization"
-                className="framer-form-input"
-                defaultValue=""
-              />
-            </div>
+          <Field label="Area of studies (Mention Degree)" required>
+            <TextInput name="studies" required />
           </Field>
-          <CheckboxGroup
-            label="Areas you are most interested in"
-            name="interests"
-            options={INTEREST_OPTIONS}
-            firstRef={interestsRef}
+          <Field label="Institution Name" required>
+            <TextInput name="institution" required autoComplete="organization" />
+          </Field>
+          <ChoiceGroup
+            label="Where did you hear about Youthlink?"
+            name="heardFrom"
+            type="radio"
+            options={HEARD_FROM_OPTIONS}
+            required
           />
           <Field
-            label="Skills and experience you can bring"
-            hint="Optional. Anything from study, work, volunteering or personal projects."
-            width="full"
-          >
-            <div className={TEXTAREA_WRAPPER}>
-              <textarea name="skills" rows={4} className="framer-form-input"></textarea>
-            </div>
-          </Field>
-          <Field
-            label="Why do you want to join YouthLink, and what do you hope to contribute?"
+            label="What are you expecting Youthlink to provide for you? And how will you return the efforts to carry our Mission?"
             required
             width="full"
           >
-            <div className={TEXTAREA_WRAPPER}>
-              <textarea
-                ref={motivationRef}
-                required
-                name="motivation"
-                rows={5}
-                className="framer-form-input"
-                onInput={clearValidity}
-              ></textarea>
+            <TextArea name="expectations" required />
+          </Field>
+          <Field label="Why do you want to join Youthlink? (100-200 words)" required width="full">
+            <WordCountTextarea name="motivation" required />
+          </Field>
+          <ChoiceGroup
+            label="How would you rate your leadership skills on a scale of 1 to 5? (Consider 5 as the highest number)"
+            name="leadership"
+            type="radio"
+            options={LEADERSHIP_OPTIONS}
+            required
+            inline
+          />
+          <ChoiceGroup
+            label="Which skills can you currently contribute?"
+            name="skills"
+            type="checkbox"
+            options={SKILL_OPTIONS}
+            required
+          />
+          <Field
+            label="For the skill selected above, describe your level & provide portfolio/sample work"
+            width="full"
+          >
+            <TextArea name="portfolioNote" />
+          </Field>
+          <Field
+            label="Portfolio or sample work file"
+            hint={`Optional. One file, max ${PORTFOLIO_MAX_MB} MB (PDF, Word, PowerPoint, JPG, PNG or ZIP).`}
+            width="full"
+          >
+            <div className="join-file">
+              <input
+                type="file"
+                name="portfolio"
+                accept={PORTFOLIO_ACCEPT}
+                onChange={(event) => event.currentTarget.setCustomValidity("")}
+              />
             </div>
           </Field>
-          <SelectField
-            label="How much time can you realistically commit each week?"
-            required
-            name="time"
-            options={TIME_OPTIONS}
-            inputRef={timeRef}
+          <Field label="What should Youthlink never become?" width="full">
+            <TextArea name="neverBecome" />
+          </Field>
+          <Field
+            label="How can Muslim youth gain power and create the right influence?"
             width="full"
-          />
-          <CheckboxGroup
-            label="How would you like to get involved?"
-            name="involvement"
-            options={INVOLVEMENT_OPTIONS}
-            firstRef={involvementRef}
-          />
-          <label className="join-choice join-consent">
-            <input
-              ref={consentRef}
-              type="checkbox"
-              required
-              name="consent"
-              className="join-checkbox"
-              onChange={clearValidity}
-            />
-            <span>
-              I confirm that the information above is accurate and I agree that YouthLink may
-              contact me about my application.
-              <span className="join-required" aria-hidden="true">
-                *
-              </span>
-            </span>
-          </label>
+          >
+            <TextArea name="youthInfluence" />
+          </Field>
+          <Field label="Any Comments" required width="full">
+            <TextArea name="anyComments" required rows={3} />
+          </Field>
+          <fieldset className="join-choices">
+            <legend>
+              <FieldLabel text="Applicant Declaration" required />
+            </legend>
+            <div className="join-choice-list">
+              {DECLARATIONS.map((text, index) => (
+                <label key={text} className="join-choice join-consent">
+                  <input
+                    type="checkbox"
+                    required
+                    name={`declaration${index + 1}`}
+                    className="join-checkbox"
+                    onChange={clearValidity}
+                  />
+                  <span>
+                    {index + 1}. {text}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </div>
         <div className="framer-866k13-container">
           <div className="ssr-variant hidden-ce8ap0">
@@ -560,6 +643,19 @@ export function JoinForm({ note }: { note?: ReactNode }) {
             <SubmitButton variant="phone" label={label} />
           </div>
         </div>
+        {state?.ok ? (
+          <p
+            ref={confirmationRef}
+            role="status"
+            tabIndex={-1}
+            className="framer-text framer-styles-preset-1dpgexf form-confirmation"
+            data-styles-preset="wUYf66_Db"
+            dir="auto"
+          >
+            Thank you, your registration has been received. The YouthLink team will review it and
+            contact you on WhatsApp or email.
+          </p>
+        ) : null}
         {state && !state.ok && !state.field ? (
           <p
             role="alert"

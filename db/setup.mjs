@@ -21,6 +21,6 @@ for (const statement of statements) {
 }
 
 const tables = await sql.query(
-  "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name IN ('join_applications', 'feedback_submissions') ORDER BY table_name",
+  "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name IN ('join_registrations', 'feedback_submissions') ORDER BY table_name",
 );
 console.log("Ready:", tables.map((row) => row.table_name).join(", "));
