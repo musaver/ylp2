@@ -1,0 +1,164 @@
+/*
+ * Home hero member stat ("5,000+ active members / come together to serve society") set as a
+ * typographic lockup: a display numeral, one hairline and a two-line caption. Hand-written; it
+ * replaces Framer's avatar stack ("Bottom Content Wrapper", framer-153e0s6) and uses no
+ * framer-* class, so no rule of the generated home.css reaches it. Colours and font stacks are
+ * the theme's. One DOM serves every breakpoint, and the only motion is the block's own scroll
+ * reveal (inline style on the <p>).
+ *
+ * Markup: p.stat > span.figure > strong.number ("5,000" + span.plus), then span.caption >
+ * span.unit, <br>, span.label.
+ */
+
+.stat {
+  --figure: 56px; /* numeral size */
+  --text: 16px; /* caption size (the theme's small text) */
+  /* Cap height per em, from the OS/2 tables of the two font files. */
+  --figure-cap: 0.66; /* Bricolage Grotesque */
+  --text-cap: 0.716; /* Almarai */
+  /* Caption leading at which its two lines span the numeral's cap height: the first line on
+     the cap line, the second on the baseline (56 * 0.66 - 16 * 0.716 = 25.5px). */
+  --leading: calc(var(--figure) * var(--figure-cap) - var(--text) * var(--text-cap));
+  /* The theme's hairline on dark (the outline button's border). */
+  --rule: var(--token-c42e4405-7003-4877-add3-139459a6462f, rgba(219, 226, 234, 0.2));
+
+  position: relative;
+  display: flex;
+  flex: none;
+  /* The numeral's box (line-height 1) is centred on its cap height, and the caption block is
+     centred on its two lines, so centring the two locks cap line and baseline together. */
+  align-items: center;
+  column-gap: calc(var(--figure) * 0.375);
+  width: 100%;
+  margin: 0;
+  padding-top: 13px; /* the overline (1px) and 12px of air */
+  color: var(--token-f5a9957c-6cef-4fb6-aa9e-60783be2bfa6, #dbe2ea);
+  font-family: "Almarai", "Almarai Placeholder", sans-serif;
+  font-size: var(--text);
+  font-weight: 400;
+  line-height: var(--leading);
+  text-align: start;
+}
+
+/* Tablet and desktop: an overline on the measure of the hero paragraph (500px). It is solid on
+   the left edge it shares with the heading, paragraph and buttons and fades out to the right,
+   so it has no second end that would have to line up with anything. */
+.stat::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: min(100%, 500px);
+  height: 1px;
+  background: linear-gradient(to right, var(--rule) 45%, transparent);
+}
+
+/* The weight is set here, on the box, and not only on the numeral: the box's own line metrics
+   would otherwise make the browser fetch the regular weight, which the page does not use. */
+.figure {
+  flex: none;
+  font-family: "Bricolage Grotesque", "Bricolage Grotesque Placeholder", sans-serif;
+  font-size: var(--figure);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.number {
+  /* Cancels the left side bearing of the "5" (51/1000 em), so the glyph itself, not its box,
+     stands on the left edge of the buttons. */
+  margin-inline-start: -0.05em;
+  color: var(--token-d5bfb7b6-6c2f-4f3c-9e32-8e71026f45bc, #fff);
+  /* A <strong>'s default is "bolder", which would be 900 here. */
+  font-weight: inherit;
+  letter-spacing: -0.03em;
+}
+
+/* The "+" as a superior in the accent colour: 0.6 of the numeral, raised until its top edge is
+   on the numeral's cap line. It must stay display: inline. As an inline-block it becomes a
+   separate object for screen readers, which then read "plus" on its own. */
+.plus {
+  position: relative;
+  top: -0.58em;
+  margin-inline-start: -0.04em;
+  color: var(--token-fd75245f-a555-4530-b2a1-29733fdba6cb, #ffec9e);
+  font-size: 0.6em;
+  letter-spacing: 0;
+}
+
+.caption {
+  min-width: 0;
+}
+
+.unit {
+  color: var(--token-d5bfb7b6-6c2f-4f3c-9e32-8e71026f45bc, #fff);
+}
+
+/* The rest of the sentence steps back a little behind what is counted. */
+.label {
+  opacity: 0.8;
+}
+
+/* Tablet: the headline drops from 80px to 68px and the numeral follows it (50px keeps the
+   caption's leading at a comfortable 21.5px); the hero paragraph's measure is 450px. */
+@media (min-width: 992px) and (max-width: 1279.98px) {
+  .stat {
+    --figure: 50px;
+  }
+
+  .stat::before {
+    width: min(100%, 450px);
+  }
+}
+
+/* Phone: the hero is centred, so there is no left edge to hang the rule on. The numeral sits
+   in the hairline instead and the caption under it. */
+@media (max-width: 991.98px) {
+  .stat {
+    --figure: 36px; /* the section heading's size at 767px and below */
+    --leading: 1.5; /* unitless, so it follows the text if a user enlarges it */
+    flex-direction: column;
+    row-gap: 6px;
+    padding-top: 0;
+    text-align: center;
+  }
+
+  .stat::before {
+    content: none;
+  }
+
+  /* With line-height 1 the middle of this row is the middle of the numeral's cap height, so
+     centring the rules puts them on the optical centre of the digits. */
+  .figure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* The rules share the space that is left (at most 3em each) and give way completely when
+     there is none, so the row cannot overflow a narrow or zoomed viewport. */
+  .figure::before,
+  .figure::after {
+    content: "";
+    flex: 1 1 0;
+    max-width: 3em;
+    height: 1px;
+  }
+
+  /* 0.5em before the "5", 0.25em after the "+": the "+" hangs in the gap, so the digits, not
+     the box, are centred between the rules. Each rule fades out away from the numeral. */
+  .figure::before {
+    margin-inline-end: 0.5em;
+    background: linear-gradient(to left, var(--rule) 35%, transparent);
+  }
+
+  .figure::after {
+    margin-inline-start: 0.25em;
+    background: linear-gradient(to right, var(--rule) 35%, transparent);
+  }
+
+  .number {
+    flex: none;
+  }
+}

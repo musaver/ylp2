@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import type { FramerImage, NavLink } from "@/lib/types";
 import { FramerBackgroundImage, REVEAL_STYLE, TOKENS } from "@/components/sections/framer-shared";
 import { PrimaryButtonLink } from "./PrimaryButtonLink";
+import styles from "./HomeBanner.module.css";
 
 /** Breakpoint classes of the home template. */
 const HIDE_DESKTOP = "hidden-72rtr7";
@@ -31,18 +32,29 @@ const BG_DECORATION_BOTTOM: FramerImage = {
 const BG_DECORATION_BOTTOM_SIZES =
   "(min-width: 1280px) 1096px, (min-width: 992px) and (max-width: 1279.98px) 100vw, (max-width: 991.98px) 100vw";
 
-const AVATAR_SIZES =
-  "(min-width: 1280px) 54px, (min-width: 992px) and (max-width: 1279.98px) 54px, (max-width: 991.98px) 54px";
 const IMAGE_SIZES =
   "(min-width: 1280px) max((min(max(100vw, 1px), 1340px) - 50px) / 2, 1px), (min-width: 992px) and (max-width: 1279.98px) max((min(max(100vw, 1px), 1340px) - 50px) / 2, 1px), (max-width: 991.98px) calc(min(max(100vw, 1px), 1340px) - 40px)";
 
-/** Classes of the four avatar slots (outer "Avatar" frame, inner image frame). */
-const AVATAR_SLOTS: ReadonlyArray<readonly [string, string]> = [
-  ["framer-nfg971", "framer-1rqkb5"],
-  ["framer-1iv371k", "framer-omt0hl"],
-  ["framer-ydsqqt", "framer-1bn6byy"],
-  ["framer-1dqn276", "framer-si33df"],
-];
+/**
+ * Reveal delay (ms) of the member stat: when the hero reveals at once, the stat settles just
+ * after the buttons above it.
+ */
+const STAT_REVEAL_DELAY_MS = 120;
+
+/**
+ * The member stat under the buttons. Its parts read as one sentence, in this order:
+ * "5,000+ active members come together to serve society".
+ */
+export interface HomeBannerStat {
+  /** Numeral, set at display size: "5,000". */
+  figure: string;
+  /** Suffix of the numeral, set as a small raised accent: "+". */
+  suffix?: string;
+  /** What is counted; first caption line: "active members". */
+  unit: string;
+  /** Rest of the sentence; second caption line. */
+  label: string;
+}
 
 export interface HomeBannerContent {
   /** First part of the H1, highlighted in yellow. */
@@ -54,10 +66,7 @@ export interface HomeBannerContent {
   primary: NavLink;
   /** Outline "Support" button. */
   secondary: NavLink;
-  /** Up to four avatars next to the stat. */
-  avatars: FramerImage[];
-  statValue: string;
-  statLabel: string;
+  stat: HomeBannerStat;
   image: FramerImage;
 }
 
@@ -67,15 +76,12 @@ export const HOME_BANNER: HomeBannerContent = {
   body: "A strong Muslim community that develops character, skills, networks and practical capacity to serve society.",
   primary: { label: "Join Youthlink", href: "/join-youthlink" },
   secondary: { label: "Our Projects", href: "/projects" },
-  // Silhouettes cut from YouthLink's own youth-and-crescent picture: decorative, so no alt text.
-  avatars: [
-    { src: "/images/youthlink/avatar-1-100.jpg", alt: "", width: 100, height: 100 },
-    { src: "/images/youthlink/avatar-2-100.jpg", alt: "", width: 100, height: 100 },
-    { src: "/images/youthlink/avatar-3-100.jpg", alt: "", width: 100, height: 100 },
-    { src: "/images/youthlink/avatar-4-100.jpg", alt: "", width: 100, height: 100 },
-  ],
-  statValue: "5,000+ active members",
-  statLabel: "come together to serve society",
+  stat: {
+    figure: "5,000",
+    suffix: "+",
+    unit: "active members",
+    label: "come together to serve society",
+  },
   image: {
     src: "/images/youthlink/hero-reading-712.jpg",
     srcSet:
@@ -153,39 +159,6 @@ function SupportButton({ link, phone }: { link: NavLink; phone: boolean }) {
   );
 }
 
-function StatText({
-  className,
-  text,
-  color,
-  centered,
-}: {
-  className: string;
-  text: string;
-  color: string;
-  centered: boolean;
-}) {
-  const style: CSSProperties = centered
-    ? { "--framer-text-alignment": "center", "--framer-text-color": color }
-    : { "--framer-text-color": color };
-  return (
-    <div
-      className={className}
-      data-framer-name="Body"
-      data-framer-component-type="RichTextContainer"
-      style={{ transform: "none" }}
-    >
-      <p
-        className="framer-text framer-styles-preset-1u0xujd"
-        data-styles-preset="QZ8HlqCwU"
-        dir="auto"
-        style={style}
-      >
-        {text}
-      </p>
-    </div>
-  );
-}
-
 function BannerHeading({ content, centered }: { content: HomeBannerContent; centered: boolean }) {
   const style: CSSProperties = centered
     ? { "--framer-text-alignment": "center", "--framer-text-color": TOKENS.white }
@@ -218,9 +191,10 @@ export interface HomeBannerProps {
 
 /**
  * Home page hero ("Home Banner Section", hash b1802124ae, section.framer-1l6zbqm): background
- * decorations, H1, intro text, "About organization" / "Support" buttons, avatar stack with
- * the families stat, and the banner photo. Desktop/tablet and phone variants are rendered in
- * Framer's `ssr-variant` wrappers.
+ * decorations, H1, intro text, "About organization" / "Support" buttons, the member stat and
+ * the banner photo. Desktop/tablet and phone variants are rendered in Framer's `ssr-variant`
+ * wrappers; the member stat is hand-written (see HomeBanner.module.css) and is one element for
+ * every breakpoint.
  */
 export function HomeBanner({ content = HOME_BANNER }: HomeBannerProps) {
   return (
@@ -345,60 +319,31 @@ export function HomeBanner({ content = HOME_BANNER }: HomeBannerProps) {
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            className="framer-153e0s6"
-            data-framer-name="Bottom Content Wrapper"
-            style={REVEAL_STYLE}
-          >
-            <div className="framer-c1cr1r" data-framer-name="Avatars Wrapper">
-              {content.avatars.slice(0, AVATAR_SLOTS.length).map((avatar, i) => {
-                const [outer, inner] = AVATAR_SLOTS[i]!;
-                return (
-                  <div key={i} className={outer} data-framer-name="Avatar">
-                    <div className="ssr-variant">
-                      <div className={inner}>
-                        <FramerBackgroundImage image={avatar} sizes={AVATAR_SIZES} />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="framer-1ysq4y7" data-framer-name="Text Content">
-              <div className={`ssr-variant ${HIDE_PHONE}`}>
-                <StatText
-                  className="framer-qbmdo2"
-                  text={content.statValue}
-                  color={TOKENS.yellow}
-                  centered={false}
-                />
-              </div>
-              <div className={`ssr-variant ${HIDE_TABLET} ${HIDE_DESKTOP}`}>
-                <StatText
-                  className="framer-qbmdo2"
-                  text={content.statValue}
-                  color={TOKENS.yellow}
-                  centered
-                />
-              </div>
-              <div className={`ssr-variant ${HIDE_PHONE}`}>
-                <StatText
-                  className="framer-1g0igfk"
-                  text={content.statLabel}
-                  color={TOKENS.white}
-                  centered={false}
-                />
-              </div>
-              <div className={`ssr-variant ${HIDE_TABLET} ${HIDE_DESKTOP}`}>
-                <StatText
-                  className="framer-1g0igfk"
-                  text={content.statLabel}
-                  color={TOKENS.white}
-                  centered
-                />
-              </div>
-            </div>
+            {/*
+              Member stat as a typographic lockup (hand-written, see HomeBanner.module.css). It
+              replaces Framer's avatar stack ("Bottom Content Wrapper") and sits in this group,
+              so it keeps the group's own step under the buttons. The space after the figure
+              and the <br /> are real separators, and the "+" stays an inline box, so the text
+              reads as one sentence: "5,000+ active members come together to serve society".
+            */}
+            <p
+              className={styles.stat}
+              data-reveal-delay={STAT_REVEAL_DELAY_MS}
+              style={REVEAL_STYLE}
+            >
+              <span className={styles.figure}>
+                <strong className={styles.number}>
+                  {content.stat.figure}
+                  {content.stat.suffix ? (
+                    <span className={styles.plus}>{content.stat.suffix}</span>
+                  ) : null}
+                </strong>
+              </span>{" "}
+              <span className={styles.caption}>
+                <span className={styles.unit}>{content.stat.unit}</span> <br />
+                <span className={styles.label}>{content.stat.label}</span>
+              </span>
+            </p>
           </div>
         </div>
         <div className="ssr-variant">
