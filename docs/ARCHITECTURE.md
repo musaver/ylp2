@@ -70,6 +70,10 @@ Each route imports its template stylesheet, e.g. `import "@/styles/templates/hom
    The instance wrapper (`div.framer-xxxx-container` with the reveal style) and the
    `ssr-variant` wrappers belong to the section that places the card.
 6. Server components by default; `"use client"` only where there is state or browser APIs.
+7. Deliberate redesigns are the exception to rule 1. They are hand-written, with a CSS module
+   next to the component (`CommitmentsSection.module.css`, `HomeBanner.module.css` for the
+   hero's member stat) and no `framer-*` classes on the new markup. The generated stylesheets
+   are never edited.
 
 ## Runtime behaviour (client components)
 
